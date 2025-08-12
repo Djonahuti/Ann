@@ -1,0 +1,139 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Bus, Eye, EyeOff } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/hooks/use-toast'
+
+export default function AdminLogin() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { signIn } = useAuth()
+  const navigate = useNavigate()
+  const { toast } = useToast()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    try {
+      const { error } = await signIn(email, password)
+      
+      if (error) {
+        toast({
+          title: "Login failed",
+          description: error.message || "Invalid credentials. Please try again.",
+          variant: "destructive",
+        })
+      } else {
+        toast({
+          title: "Login successful",
+          description: "Welcome to the admin dashboard!",
+        })
+        navigate('/admin')
+      }
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-lg flex items-center justify-center">
+            <Bus className="h-10 w-10 text-white" />
+          </div>
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+            Admin Login
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Sign in to access the Annhurst Global admin dashboard
+          </p>
+        </div>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1"
+                placeholder="admin@annhurstglobal.com"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </Label>
+              <div className="relative mt-1">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign in'}
+            </Button>
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Demo credentials: admin@annhurstglobal.com / password123
+            </p>
+          </div>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-xs text-gray-500">
+            © 2024 Annhurst Global Service Limited. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+} 
