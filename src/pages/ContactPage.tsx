@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Phone, Mail, MapPin, Clock, Bus } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ export default function ContactPage() {
     service: 'higher-purchase'
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { toast } = useToast()
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,10 +24,7 @@ export default function ContactPage() {
     
     // Simulate form submission
     setTimeout(() => {
-      toast({
-        title: "Message sent successfully!",
-        description: "We'll get back to you within 24 hours.",
-      })
+      toast("Message sent successfully!\nWe'll get back to you within 24 hours.")
       setFormData({
         name: '',
         email: '',

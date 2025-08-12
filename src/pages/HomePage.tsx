@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Bus, Shield, Clock, Users, TrendingUp, Award } from 'lucide-react'
+import { Bus, Shield, Clock, Users, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function HomePage() {

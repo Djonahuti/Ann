@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +27,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -56,7 +55,7 @@ export default function AdminPages() {
     meta_description: '',
     is_published: false
   })
-  const { toast } = useToast()
+
 
   useEffect(() => {
     // Simulate loading data
@@ -144,10 +143,7 @@ export default function AdminPages() {
           ? { ...page, ...formData, updated_at: new Date().toISOString() }
           : page
       ))
-      toast({
-        title: "Page updated",
-        description: "The page has been successfully updated.",
-      })
+      toast.success("Page updated successfully")
     } else {
       // Create new page
       const newPage: Page = {
@@ -157,20 +153,14 @@ export default function AdminPages() {
         updated_at: new Date().toISOString()
       }
       setPages(prev => [...prev, newPage])
-      toast({
-        title: "Page created",
-        description: "The new page has been successfully created.",
-      })
+      toast.success("Page created successfully")
     }
     setIsDialogOpen(false)
   }
 
   const handleDeletePage = (pageId: string) => {
     setPages(prev => prev.filter(page => page.id !== pageId))
-    toast({
-      title: "Page deleted",
-      description: "The page has been successfully deleted.",
-    })
+    toast.success("Page deleted successfully")
   }
 
   const handleTogglePublish = (pageId: string) => {

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/contexts/AuthContext'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
@@ -14,7 +14,6 @@ export default function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const { signIn } = useAuth()
   const navigate = useNavigate()
-  const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,24 +23,38 @@ export default function AdminLogin() {
       const { error } = await signIn(email, password)
       
       if (error) {
-        toast({
-          title: "Login failed",
-          description: error.message || "Invalid credentials. Please try again.",
-          variant: "destructive",
-        })
+        toast(
+          <div>
+            <strong>Login failed</strong>
+            <div>{error.message || "Invalid credentials. Please try again."}</div>
+          </div>,
+          { 
+            className: "destructive"
+          }
+        )
       } else {
-        toast({
-          title: "Login successful",
-          description: "Welcome to the admin dashboard!",
-        })
+        toast(
+          <div>
+            <strong>Login successful</strong>
+            <div>Welcome to the admin dashboard!</div>
+          </div>
+        )
         navigate('/admin')
       }
     } catch (error) {
-      toast({
-        title: "Login failed",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      })
+      let message = "An unexpected error occurred. Please try again.";
+      if (error && typeof error === "object" && "message" in error && typeof (error as any).message === "string") {
+        message = (error as any).message;
+      }
+      toast(
+        <div>
+          <strong>Login failed</strong>
+          <div>{message}</div>
+        </div>,
+        { 
+          className: "destructive"
+        }
+      )
     } finally {
       setIsLoading(false)
     }
