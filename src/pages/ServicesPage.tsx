@@ -4,16 +4,15 @@ import { Link } from 'react-router-dom'
 
 export default function ServicesPage() {
   return (
-    <div className="bg-white">
+    <div className="bg-white playfair-display">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-blue-800">
-        <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative bg-gradient-to-r from-gray-100 to-red-200">
         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Our Services
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              Our <span className='text-primary'>Services</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-blue-100 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg leading-8 text-gray-800 max-w-3xl mx-auto">
               Comprehensive bus financing solutions designed to help your transportation 
               business grow and succeed
             </p>
@@ -25,7 +24,7 @@ export default function ServicesPage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">What We Offer</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">What We Offer</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Complete financing solutions
             </p>
@@ -39,7 +38,7 @@ export default function ServicesPage() {
               {/* Higher Purchase */}
               <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
                 <div className="flex items-center gap-x-3 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                     <Bus className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold leading-7 text-gray-900">Higher Purchase</h3>
@@ -51,19 +50,19 @@ export default function ServicesPage() {
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-blue-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
                     <span className="text-sm text-gray-600">Competitive interest rates</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-blue-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
                     <span className="text-sm text-gray-600">Flexible payment terms</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-blue-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
                     <span className="text-sm text-gray-600">Quick approval process</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-blue-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-primary"></div>
                     <span className="text-sm text-gray-600">No hidden fees</span>
                   </li>
                 </ul>
@@ -121,7 +120,7 @@ export default function ServicesPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">How It Works</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">How It Works</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Simple 4-step process
             </p>
@@ -129,7 +128,7 @@ export default function ServicesPage() {
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-4">
               <div className="flex flex-col items-center text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mb-4">
                   <span className="text-xl font-bold text-white">1</span>
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Application</h3>
@@ -138,7 +137,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mb-4">
                   <span className="text-xl font-bold text-white">2</span>
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Review</h3>
@@ -147,7 +146,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mb-4">
                   <span className="text-xl font-bold text-white">3</span>
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Approval</h3>
@@ -156,7 +155,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary mb-4">
                   <span className="text-xl font-bold text-white">4</span>
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Funding</h3>
@@ -173,7 +172,7 @@ export default function ServicesPage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Why Choose Us</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">Why Choose Us</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Benefits that set us apart
             </p>
@@ -181,7 +180,7 @@ export default function ServicesPage() {
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               <div className="flex flex-col">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Calculator className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Competitive Rates</h3>
@@ -191,7 +190,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="flex flex-col">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Fast Processing</h3>
@@ -201,7 +200,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="flex flex-col">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Secure & Reliable</h3>
@@ -219,7 +218,7 @@ export default function ServicesPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Additional Support</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">Additional Support</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               We're here to help you succeed
             </p>
@@ -227,7 +226,7 @@ export default function ServicesPage() {
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
               <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Documentation Support</h3>
@@ -237,7 +236,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Headphones className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">24/7 Support</h3>
@@ -247,7 +246,7 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600 mb-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Business Consulting</h3>
@@ -262,7 +261,7 @@ export default function ServicesPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-blue-600">
+      <div className="bg-primary">
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -274,12 +273,12 @@ export default function ServicesPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-primary hover:bg-gray-100">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
                   Learn More
                 </Button>
               </Link>
