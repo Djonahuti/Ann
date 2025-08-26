@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Bus, Phone, Mail, MapPin } from 'lucide-react'
+import { Phone, Mail, MapPin } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -9,10 +9,9 @@ export default function Footer() {
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                <Bus className="w-6 h-6 text-white" />
+              <div className="w-25 h-25 rounded-lg flex items-center justify-center">
+                <img src="/logo/logo.png" alt="Annhurst Transport" className="h-20 w-auto" />
               </div>
-              <span className="text-xl font-bold">Annhurst Global Service Limited</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Your trusted partner in bus higher purchase solutions. We provide comprehensive 
@@ -21,11 +20,11 @@ export default function Footer() {
             <div className="space-y-2 text-sm text-gray-300">
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
-                <span>+234 123 456 7890</span>
+                <span>+234 809 318 3556</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span>info@annhurstglobal.com</span>
+                <span>customerservices@annhurst-gsl.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4" />
