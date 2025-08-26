@@ -19,10 +19,7 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Bus className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">Annhurst Global</span>
+            <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
           </Link>
         </div>
         <div className="flex lg:hidden">
