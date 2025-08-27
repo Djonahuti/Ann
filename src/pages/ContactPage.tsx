@@ -45,15 +45,15 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-white">
+    <div className="bg-white playfair-display">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-gray-100 to-red-200">
         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Contact Us
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              Contact <span className='text-primary'>Us</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-blue-100 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg leading-8 text-gray-800 max-w-3xl mx-auto">
               Ready to expand your bus fleet? Get in touch with our team today and 
               discover how we can help you grow your transportation business.
             </p>
@@ -130,7 +130,7 @@ export default function ContactPage() {
                     name="service"
                     value={formData.service}
                     onChange={handleChange}
-                    className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                    className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-primary focus:outline-none focus:ring-primary"
                   >
                     <option value="higher-purchase">Bus Higher Purchase</option>
                     <option value="fleet-management">Fleet Management</option>
@@ -171,18 +171,18 @@ export default function ContactPage() {
               </h2>
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                     <Phone className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Phone</h3>
                     <p className="mt-2 text-gray-600">
-                      <a href="tel:+2341234567890" className="hover:text-blue-600">
+                      <a href="tel:+2341234567890" className="hover:text-primary">
                         +234 123 456 7890
                       </a>
                     </p>
                     <p className="text-gray-600">
-                      <a href="tel:+2349876543210" className="hover:text-blue-600">
+                      <a href="tel:+2349876543210" className="hover:text-primary">
                         +234 987 654 3210
                       </a>
                     </p>
@@ -190,18 +190,18 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Email</h3>
                     <p className="mt-2 text-gray-600">
-                      <a href="mailto:info@annhurstglobal.com" className="hover:text-blue-600">
+                      <a href="mailto:info@annhurstglobal.com" className="hover:text-primary">
                         info@annhurstglobal.com
                       </a>
                     </p>
                     <p className="text-gray-600">
-                      <a href="mailto:sales@annhurstglobal.com" className="hover:text-blue-600">
+                      <a href="mailto:sales@annhurstglobal.com" className="hover:text-primary">
                         sales@annhurstglobal.com
                       </a>
                     </p>
@@ -209,7 +209,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -223,7 +223,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -247,11 +247,11 @@ export default function ContactPage() {
                   and quick questions about our services.
                 </p>
                 <div className="flex space-x-4">
-                  <Button variant="outline" className="flex-1">
+                  <Button className="flex-1 bg-primary text-gray-200 hover:bg-primary-dark">
                     <Phone className="h-4 w-4 mr-2" />
                     Call Now
                   </Button>
-                  <Button variant="outline" className="flex-1">
+                  <Button variant="outline" className="flex-1 border-primary text-primary hover:bg-primary-light hover:text-gray-200">
                     <Mail className="h-4 w-4 mr-2" />
                     Email
                   </Button>
@@ -266,7 +266,7 @@ export default function ContactPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Find Us</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">Find Us</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Visit our office
             </p>
@@ -291,7 +291,7 @@ export default function ContactPage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">FAQ</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">FAQ</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Frequently asked questions
             </p>

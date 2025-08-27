@@ -77,7 +77,7 @@ export default function ServicesPage() {
               {/* Fleet Management */}
               <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
                 <div className="flex items-center gap-x-3 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-gray-600 to-primary-light">
                     <TrendingUp className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold leading-7 text-gray-900">Fleet Management</h3>
@@ -88,26 +88,26 @@ export default function ServicesPage() {
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-gradient-to-r from-gray-600 to-primary-light"></div>
                     <span className="text-sm text-gray-600">Maintenance scheduling</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-gradient-to-r from-gray-600 to-primary-light"></div>
                     <span className="text-sm text-gray-600">Insurance management</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-gradient-to-r from-gray-600 to-primary-light"></div>
                     <span className="text-sm text-gray-600">Performance tracking</span>
                   </li>
                   <li className="flex items-center gap-x-3">
-                    <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                    <div className="h-2 w-2 rounded-full bg-gradient-to-r from-gray-600 to-primary-light"></div>
                     <span className="text-sm text-gray-600">Cost optimization</span>
                   </li>
                 </ul>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">Custom Pricing</span>
                   <Link to="/contact">
-                    <Button variant="outline">Learn More</Button>
+                    <Button variant="outline" className='border-primary text-primary hover:bg-primary-light hover:text-gray-200'>Learn More</Button>
                   </Link>
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function ServicesPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-primary">
+      <div className="bg-gradient-to-r from-gray-600 to-primary-light">
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -273,12 +273,12 @@ export default function ServicesPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-primary hover:bg-gray-100 hover:text-primary-dark">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light border-white text-gray-100 hover:bg-primary-light hover:text-gray-500">
                   Learn More
                 </Button>
               </Link>
