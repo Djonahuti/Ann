@@ -63,10 +63,7 @@ export default function Header() {
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Bus className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-lg font-bold text-gray-900">Annhurst Global</span>
+                <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
               </Link>
               <button
                 type="button"
