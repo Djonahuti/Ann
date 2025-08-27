@@ -178,12 +178,12 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Phone</h3>
                     <p className="mt-2 text-gray-600">
                       <a href="tel:+2341234567890" className="hover:text-primary">
-                        +234 123 456 7890
+                        +234 809 318 3556
                       </a>
                     </p>
                     <p className="text-gray-600">
                       <a href="tel:+2349876543210" className="hover:text-primary">
-                        +234 987 654 3210
+                        +234 816 746 2350
                       </a>
                     </p>
                   </div>
@@ -197,12 +197,12 @@ export default function ContactPage() {
                     <h3 className="text-lg font-semibold text-gray-900">Email</h3>
                     <p className="mt-2 text-gray-600">
                       <a href="mailto:info@annhurstglobal.com" className="hover:text-primary">
-                        info@annhurstglobal.com
+                        customerservices@annhurst-gsl.com
                       </a>
                     </p>
                     <p className="text-gray-600">
                       <a href="mailto:sales@annhurstglobal.com" className="hover:text-primary">
-                        sales@annhurstglobal.com
+                        Info@annhurst-gsl.com
                       </a>
                     </p>
                   </div>
@@ -215,8 +215,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Office Address</h3>
                     <p className="mt-2 text-gray-600">
-                      123 Business District<br />
-                      Victoria Island<br />
+                      13B Obafemi Anibaba<br />
+                      Admiralty Way Lekki<br />
                       Lagos, Nigeria
                     </p>
                   </div>
@@ -277,12 +277,17 @@ export default function ContactPage() {
           </div>
           
           {/* Placeholder for map */}
-          <div className="aspect-[16/9] rounded-2xl bg-gray-200 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Interactive Map Coming Soon</p>
-              <p className="text-sm text-gray-400">123 Business District, Victoria Island, Lagos</p>
-            </div>
+          <div className="aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
+            <iframe
+              title="AnnHurst Global Office Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15858.389721507043!2d3.437834379081!3d6.4457033684787985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103bf4f9137e9329%3A0xfcc2ef66eb8f604b!2s13B%20Obafemi%20Anibaba%20St%2C%20Island%2C%20Lagos%20105102%2C%20Lagos!5e0!3m2!1sen!2sng!4v1756320380727!5m2!1sen!2sng"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
         </div>
       </div>
