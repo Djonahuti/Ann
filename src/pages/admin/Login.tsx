@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -65,7 +65,9 @@ export default function AdminLogin() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="mx-auto h-16 w-16 rounded-lg flex items-center justify-center">
-            <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+            <Link to="/">
+             <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+            </Link>
           </div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
             Admin Login

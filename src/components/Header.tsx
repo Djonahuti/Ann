@@ -48,9 +48,9 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to="/admin/login">
-            <Button variant="outline" size="sm">
-              Admin
+          <Link to="/contact">
+            <Button variant="ghost" size="sm" className="border-2 flex-1 border-primary text-primary hover:bg-primary-dark hover:text-gray-200">
+              Get Started
             </Button>
           </Link>
         </div>
