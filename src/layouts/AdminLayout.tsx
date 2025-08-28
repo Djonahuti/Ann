@@ -3,7 +3,6 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { 
   Menu, 
   X, 
-  Bus, 
   Home, 
   FileText, 
   Settings, 
@@ -45,10 +44,9 @@ export default function AdminLayout() {
         <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white">
           <div className="flex h-16 items-center justify-between px-6 border-b">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Bus className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-bold text-gray-900">Annhurst Admin</span>
+              <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
+                <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+              </Link>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -67,8 +65,8 @@ export default function AdminLayout() {
                       to={item.href}
                       className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-red-50 text-primary border border-primary'
+                          : 'text-gray-700 hover:bg-primary hover:text-white transition-colors'
                       }`}
                       onClick={() => setSidebarOpen(false)}
                     >
@@ -88,10 +86,9 @@ export default function AdminLayout() {
         <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
           <div className="flex h-16 items-center">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Bus className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-bold text-gray-900">Annhurst Admin</span>
+              <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
+                <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+              </Link>
             </div>
           </div>
           <nav className="flex flex-1 flex-col">
@@ -106,8 +103,8 @@ export default function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                             isActive
-                              ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                              : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-red-50 text-primary border border-primary'
+                          : 'text-gray-700 hover:bg-primary hover:text-white transition-colors'
                           }`}
                         >
                           <item.icon className="h-5 w-5 mr-3" />
