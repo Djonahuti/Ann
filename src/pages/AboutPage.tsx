@@ -57,7 +57,7 @@ export default function AboutPage() {
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex items-center gap-x-3 mb-4">
                   <Target className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-semibold text-gray-900">Our Mission</h3>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                   operations, contributing to economic development across Nigeria.
                 </p>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex items-center gap-x-3 mb-4">
                   <Eye className="h-8 w-8 text-primary" />
                   <h3 className="text-xl font-semibold text-gray-900">Our Vision</h3>
@@ -94,9 +94,9 @@ export default function AboutPage() {
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
-                  <Users className="h-6 w-6 text-white" />
+                  <Users className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Customer First</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
@@ -104,9 +104,9 @@ export default function AboutPage() {
                   success is our priority.
                 </p>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
-                  <Award className="h-6 w-6 text-white" />
+                  <Award className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Excellence</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
@@ -114,9 +114,9 @@ export default function AboutPage() {
                   service to financial solutions.
                 </p>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
-                  <Globe className="h-6 w-6 text-white" />
+                  <Globe className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold leading-7 text-gray-900">Innovation</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
@@ -180,19 +180,19 @@ export default function AboutPage() {
               </h2>
             </div>
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Years in Business</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">4+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">500+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Satisfied Clients</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Team Members</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">25+</dd>
               </div>

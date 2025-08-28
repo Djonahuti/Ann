@@ -24,7 +24,7 @@ export default function HomePage() {
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Shield className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
                   Secure Financing
@@ -36,7 +36,7 @@ export default function HomePage() {
                   </p>
                 </dd>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Clock className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
                   Quick Approval
@@ -48,7 +48,7 @@ export default function HomePage() {
                   </p>
                 </dd>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Users className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
                   Expert Support
@@ -76,7 +76,7 @@ export default function HomePage() {
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
+              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
                 <div className="flex items-center gap-x-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                     <Bus className="h-6 w-6 text-white" />
@@ -93,7 +93,7 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8">
+              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
                 <div className="flex items-center gap-x-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                     <TrendingUp className="h-6 w-6 text-white" />
@@ -162,12 +162,12 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary">
+                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary transform transition duration-300 ease-in-out hover:scale-105">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/services">
-                <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none">
+                <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
                   Learn More
                 </Button>
               </Link>

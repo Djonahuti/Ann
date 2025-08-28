@@ -69,7 +69,7 @@ export default function ServicesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">From 12% APR</span>
                   <Link to="/contact">
-                    <Button className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-primary-dark hover:to-primary-dark">Get Started</Button>
+                    <Button className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-primary-dark hover:to-primary-dark transform transition duration-300 ease-in-out hover:scale-105">Get Started</Button>
                   </Link>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function ServicesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">Custom Pricing</span>
                   <Link to="/contact">
-                    <Button variant="ghost" className='border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200'>Learn More</Button>
+                    <Button variant="ghost" className='border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 transform transition duration-300 ease-in-out hover:scale-105'>Learn More</Button>
                   </Link>
                 </div>
               </div>
@@ -225,7 +225,7 @@ export default function ServicesPage() {
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
+              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg hover:border-2 hover:border-primary">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
@@ -235,7 +235,7 @@ export default function ServicesPage() {
                   application process.
                 </p>
               </div>
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
+              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg hover:border-2 hover:border-primary">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Headphones className="h-6 w-6 text-white" />
                 </div>
@@ -245,7 +245,7 @@ export default function ServicesPage() {
                   your questions and provide assistance.
                 </p>
               </div>
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6">
+              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-6 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg hover:border-2 hover:border-primary">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary mb-4">
                   <Users className="h-6 w-6 text-white" />
                 </div>
@@ -273,12 +273,12 @@ export default function ServicesPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary">
+                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary transform transition duration-300 ease-in-out hover:scale-105">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none">
+                <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
                   Learn More
                 </Button>
               </Link>
