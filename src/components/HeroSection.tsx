@@ -26,12 +26,12 @@ export default function HeroSection() {
         </p>
       <div className="flex flex-col sm:flex-row gap-4 mb-3 mt-8">
         <Link to="/services">
-          <Button size="lg" className="bg-primary text-gray-200 hover:bg-primary-dark">
+          <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:bg-primary-dark hover:from-primary-dark hover:to-primary-dark">
             Explore Services
           </Button>
         </Link>
         <Link to="/contact">
-          <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary-light hover:text-gray-200">
+          <Button variant="ghost" size="lg" className="border border-primary text-primary hover:bg-primary-dark hover:text-gray-200 hover:border-none">
             Get Started
           </Button>
         </Link>

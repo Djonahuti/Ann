@@ -162,12 +162,12 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-100 hover:text-primary-dark">
+                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:bg-primary-dark hover:from-primary-dark hover:to-primary-dark">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/services">
-                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light border-white text-gray-100 hover:bg-primary-light hover:text-gray-500">
+                <Button variant="ghost" size="lg" className="border border-white text-gray-200 hover:bg-primary-dark hover:text-gray-200 hover:border-none">
                   Learn More
                 </Button>
               </Link>
