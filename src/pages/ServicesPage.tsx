@@ -69,7 +69,7 @@ export default function ServicesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">From 12% APR</span>
                   <Link to="/contact">
-                    <Button>Get Started</Button>
+                    <Button className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-primary-dark hover:to-primary-dark">Get Started</Button>
                   </Link>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function ServicesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-gray-900">Custom Pricing</span>
                   <Link to="/contact">
-                    <Button variant="outline" className='border-primary text-primary hover:bg-primary-light hover:text-gray-200'>Learn More</Button>
+                    <Button variant="ghost" className='border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200'>Learn More</Button>
                   </Link>
                 </div>
               </div>
@@ -273,12 +273,12 @@ export default function ServicesPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-100 hover:text-primary-dark">
+                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary">
                   Contact Us
                 </Button>
               </Link>
               <Link to="/about">
-                <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light border-white text-gray-100 hover:bg-primary-light hover:text-gray-500">
+                <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none">
                   Learn More
                 </Button>
               </Link>

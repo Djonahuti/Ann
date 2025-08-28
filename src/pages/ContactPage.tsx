@@ -156,7 +156,7 @@ export default function ContactPage() {
                 <Button 
                   type="submit" 
                   size="lg" 
-                  className="w-full"
+                  className="w-full hover:bg-primary-dark"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
@@ -171,7 +171,7 @@ export default function ContactPage() {
               </h2>
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-gray-600 to-primary-light">
                     <Phone className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -190,7 +190,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-gray-600 to-primary-light">
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -209,7 +209,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-gray-600 to-primary-light">
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -223,7 +223,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r from-gray-600 to-primary-light">
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -251,7 +251,7 @@ export default function ContactPage() {
                     <Phone className="h-4 w-4 mr-2" />
                     Call Now
                   </Button>
-                  <Button variant="outline" className="flex-1 border-primary text-primary hover:bg-primary-light hover:text-gray-200">
+                  <Button variant="ghost" className="border-2 flex-1 border-primary text-primary hover:bg-primary-dark hover:text-gray-200">
                     <Mail className="h-4 w-4 mr-2" />
                     Email
                   </Button>
