@@ -1,4 +1,4 @@
-# Annhurst Global Service Limited - Company Website
+# Annhurst Transport Service Limited - Company Website
 
 A modern, responsive company website built with Vite, React, TypeScript, and shadcn/ui, featuring a comprehensive admin panel for content management.
 
@@ -75,10 +75,10 @@ CREATE TABLE pages (
 
 -- Insert sample pages
 INSERT INTO pages (title, slug, content, meta_description, is_published) VALUES
-('Home Page', 'home', '<h1>Welcome to Annhurst Global</h1><p>Your trusted partner in bus financing...</p>', 'Annhurst Global Service Limited provides comprehensive bus financing solutions', true),
-('About Us', 'about', '<h1>About Annhurst Global</h1><p>Founded in 2009...</p>', 'Learn about Annhurst Global Service Limited and our mission', true),
+('Home Page', 'home', '<h1>Welcome to Annhurst Global</h1><p>Your trusted partner in bus financing...</p>', 'Annhurst Transport Service Limited provides comprehensive bus financing solutions', true),
+('About Us', 'about', '<h1>About Annhurst Global</h1><p>Founded in 2009...</p>', 'Learn about Annhurst Transport Service Limited and our mission', true),
 ('Services', 'services', '<h1>Our Services</h1><p>Bus financing and fleet management...</p>', 'Explore our bus financing and fleet management services', true),
-('Contact', 'contact', '<h1>Contact Us</h1><p>Get in touch with our team...</p>', 'Contact Annhurst Global Service Limited for bus financing', true);
+('Contact', 'contact', '<h1>Contact Us</h1><p>Get in touch with our team...</p>', 'Contact Annhurst Transport Service Limited for bus financing', true);
 ```
 
 ### 5. Run the development server
@@ -202,4 +202,4 @@ For support or questions:
 
 ---
 
-Built with ❤️ for Annhurst Global Service Limited 
+Built with ❤️ for Annhurst Transport Service Limited 

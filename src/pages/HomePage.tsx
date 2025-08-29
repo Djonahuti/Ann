@@ -130,15 +130,15 @@ export default function HomePage() {
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col bg-gray-400/5 p-8">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">500+</dd>
-              </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Happy Clients</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8">
+                <dt className="text-sm font-semibold leading-6 text-gray-600">Happy Clients</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">100+</dd>
+              </div>
+              <div className="flex flex-col bg-gray-400/5 p-8">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Years Experience</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">4+</dd>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">5+</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Success Rate</dt>

@@ -27,10 +27,10 @@ export default function AboutPage() {
                   Our Story
                 </h2>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Founded with a vision to democratize investment opportunities in Nigeria, Annhurst Global Services Limited has been at the forefront of providing accessible, profitable investment options for individuals and businesses across the country.
+                  Founded with a vision to democratize investment opportunities in Nigeria, Annhurst Transport Services Limited has been at the forefront of providing accessible, profitable investment options for individuals and businesses across the country.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  With over 4 years of proven excellence, we have built a reputation for reliability, transparency, and consistent returns. Our expertise spans across transportation, real estate, and business expansion sectors, making us your one-stop solution for investment opportunities.
+                  With over 5 years of proven excellence, we have built a reputation for reliability, transparency, and consistent returns. Our expertise spans across transportation, real estate, and business expansion sectors, making us your one-stop solution for investment opportunities.
                 </p>
               </div>
               <div className="relative">
@@ -182,15 +182,15 @@ export default function AboutPage() {
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Years in Business</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">4+</dd>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">5+</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">500+</dd>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Satisfied Clients</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">100+</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Team Members</dt>

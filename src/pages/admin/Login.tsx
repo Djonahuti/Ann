@@ -145,7 +145,7 @@ export default function AdminLogin() {
 
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
-            © 2024 Annhurst Global Service Limited. All rights reserved.
+            © 2024 Annhurst Transport Service Limited. All rights reserved.
           </p>
         </div>
       </div>

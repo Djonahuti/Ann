@@ -20,8 +20,8 @@ CREATE TABLE public.users (
 
 -- Insert sample data for the pages table
 INSERT INTO public.pages (title, slug, content, meta_description, is_published) VALUES
-('Home', 'home', '<h1>Welcome to Annhurst Global Service Limited</h1><p>Your trusted partner for bus higher purchase solutions.</p>', 'Leading provider of bus financing and fleet management services', true),
-('About Us', 'about', '<h1>About Annhurst Global Service Limited</h1><p>We specialize in providing buses for higher purchase with flexible financing options.</p>', 'Learn about our company mission and values', true),
+('Home', 'home', '<h1>Welcome to Annhurst Transport Service Limited</h1><p>Your trusted partner for bus higher purchase solutions.</p>', 'Leading provider of bus financing and fleet management services', true),
+('About Us', 'about', '<h1>About Annhurst Transport Service Limited</h1><p>We specialize in providing buses for higher purchase with flexible financing options.</p>', 'Learn about our company mission and values', true),
 ('Services', 'services', '<h1>Our Services</h1><p>Higher Purchase Solutions and Fleet Management Services</p>', 'Comprehensive bus financing and management services', true),
 ('Contact', 'contact', '<h1>Contact Us</h1><p>Get in touch for your bus financing needs.</p>', 'Contact information and inquiry form', true);
 

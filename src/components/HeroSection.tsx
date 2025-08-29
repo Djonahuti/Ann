@@ -70,7 +70,7 @@ export default function HeroSection() {
 
     {/* Metrics Row */}
     <div className="mt-14 flex gap-12 text-primary font-bold text-2xl">
-      <div className="text-center">4+<br />
+      <div className="text-center">5+<br />
           <span className="text-gray-600 underline decoration-primary text-xs">
             Years of excellence
           </span>

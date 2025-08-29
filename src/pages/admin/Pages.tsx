@@ -66,7 +66,7 @@ export default function AdminPages() {
           title: 'Home Page',
           slug: 'home',
           content: '<h1>Welcome to Annhurst Global</h1><p>Your trusted partner in bus financing...</p>',
-          meta_description: 'Annhurst Global Service Limited provides comprehensive bus financing solutions',
+          meta_description: 'Annhurst Transport Service Limited provides comprehensive bus financing solutions',
           is_published: true,
           created_at: '2024-01-10T10:00:00Z',
           updated_at: '2024-01-15T14:30:00Z'
@@ -76,7 +76,7 @@ export default function AdminPages() {
           title: 'About Us',
           slug: 'about',
           content: '<h1>About Annhurst Global</h1><p>Founded in 2009...</p>',
-          meta_description: 'Learn about Annhurst Global Service Limited and our mission',
+          meta_description: 'Learn about Annhurst Transport Service Limited and our mission',
           is_published: true,
           created_at: '2024-01-10T10:00:00Z',
           updated_at: '2024-01-14T16:45:00Z'
@@ -96,7 +96,7 @@ export default function AdminPages() {
           title: 'Contact',
           slug: 'contact',
           content: '<h1>Contact Us</h1><p>Get in touch with our team...</p>',
-          meta_description: 'Contact Annhurst Global Service Limited for bus financing',
+          meta_description: 'Contact Annhurst Transport Service Limited for bus financing',
           is_published: true,
           created_at: '2024-01-10T10:00:00Z',
           updated_at: '2024-01-12T13:20:00Z'
