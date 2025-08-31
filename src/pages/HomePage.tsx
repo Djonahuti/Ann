@@ -128,19 +128,19 @@ export default function HomePage() {
               </p>
             </div>
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Happy Clients</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">100+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Years Experience</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">5+</dd>
               </div>
-              <div className="flex flex-col bg-gray-400/5 p-8">
+              <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
                 <dt className="text-sm font-semibold leading-6 text-gray-600">Success Rate</dt>
                 <dd className="order-first text-3xl font-bold tracking-tight text-primary">98%</dd>
               </div>
