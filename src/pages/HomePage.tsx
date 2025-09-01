@@ -2,8 +2,104 @@ import { Link } from 'react-router-dom'
 import { Bus, Shield, Clock, Users, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import HeroSection from '@/components/HeroSection'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+
+interface Page {
+  id: string
+  title: string
+  slug: string
+  is_published: boolean
+  text: string | null
+  hero_big_black: string | null
+  hero_big_primary: string | null
+  hero_text: string | null
+  hero_year: string | null
+  hero_year_span: string | null
+  hero_100: string | null
+  hero_100_span: string | null
+  hero_24: string | null
+  hero_24_span: string | null
+  hero_primary_button: string | null
+  hero_secondary_button: string | null
+  body_heading: string | null
+  body_sub_heading: string | null
+  body_first_text: string | null
+  body_second_text: string | null
+  body_heading2: string | null
+  body_sub_heading2: string | null
+  body_heading3: string | null
+  body_sub_heading3: string | null
+  body_heading4: string | null
+  body_sub_heading4: string | null
+  section_text: string | null
+  section_secondary_btn: string | null
+  team_img: string | null
+  team_text: string | null
+  team_role: string | null
+  team_text2: string | null
+  team_role2: string | null
+  team_text3: string | null
+  team_role3: string | null
+  box_head: string | null
+  box_text: string | null
+  box_head2: string | null
+  box_text2: string | null
+  box_head3: string | null
+  box_text3: string | null
+  box_head4: string | null
+  box_text4: string | null
+  box_head5: string | null
+  box_text5: string | null
+  box_head6: string | null
+  box_text6: string | null
+  box_head7: string | null
+  box_text7: string | null
+  box_head8: string | null
+  box_text8: string | null
+  box_head9: string | null
+  box_text9: string | null
+  section_head: string | null
+  section_primary_btn: string | null
+}
 
 export default function HomePage() {
+  const [page, setPage] = useState<Page | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchPage()
+  }, [])
+
+  const fetchPage = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('pages')
+      .select('*')
+      .eq('slug', 'home')
+      .eq('is_published', true)
+      .single()
+
+    if (error) {
+      console.error('Error fetching page:', error.message)
+    } else {
+      setPage(data)
+    }
+    setLoading(false)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  if (!page) {
+    return <div className="p-12 text-center text-red-500">Nothing to see here.</div>
+  }
+
   return (
     <div className="playfair-display">
       {/* Hero Section */}
@@ -13,50 +109,44 @@ export default function HomePage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary-light">Why Choose Us</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary-light">{page.body_sub_heading}</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Everything you need for your bus fleet
+              {page.body_heading}
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              We understand the challenges of running a transportation business. That's why we've 
-              designed our services to be flexible, reliable, and tailored to your needs.
-            </p>
+            <p className="mt-6 text-lg leading-8 text-gray-600">{page.body_first_text}</p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Shield className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
-                  Secure Financing
+                  {page.box_head}
                 </dt>
                 <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
                   <p className="flex-auto">
-                    Our secure financing options ensure you get the best rates while maintaining 
-                    financial stability for your business.
+                    {page.box_text}
                   </p>
                 </dd>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Clock className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
-                  Quick Approval
+                  {page.box_head2}
                 </dt>
                 <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
                   <p className="flex-auto">
-                    Fast approval process with minimal documentation requirements. 
-                    Get your buses on the road in record time.
+                    {page.box_text2}
                   </p>
                 </dd>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
                 <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                   <Users className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
-                  Expert Support
+                  {page.box_head3}
                 </dt>
                 <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
                   <p className="flex-auto">
-                    Our team of transportation finance experts is here to guide you 
-                    through every step of the process.
+                    {page.box_text3}
                   </p>
                 </dd>
               </div>
@@ -69,9 +159,9 @@ export default function HomePage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary">Our Services</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">{page.body_sub_heading2}</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Comprehensive bus financing solutions
+              {page.body_heading2}
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -81,15 +171,14 @@ export default function HomePage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                     <Bus className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold leading-7 text-gray-900">Higher Purchase</h3>
+                  <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head4}</h3>
                 </div>
                 <p className="mt-4 text-base leading-7 text-gray-600">
-                  Flexible higher purchase agreements with competitive interest rates. 
-                  Own your buses while maintaining cash flow for operations.
+                  {page.box_text4}
                 </p>
                 <div className="mt-6">
                   <Link to="/services" className="text-primary hover:text-primary-dark font-medium">
-                    Learn more →
+                    {page.section_secondary_btn} →
                   </Link>
                 </div>
               </div>
@@ -98,15 +187,14 @@ export default function HomePage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
                     <TrendingUp className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold leading-7 text-gray-900">Fleet Management</h3>
+                  <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head5}</h3>
                 </div>
                 <p className="mt-4 text-base leading-7 text-gray-600">
-                  Comprehensive fleet management services including maintenance scheduling, 
-                  insurance, and operational support.
+                  {page.box_text5}
                 </p>
                 <div className="mt-6">
                   <Link to="/services" className="text-primary hover:text-primary-dark font-medium">
-                    Learn more →
+                    {page.section_secondary_btn} →
                   </Link>
                 </div>
               </div>
@@ -121,28 +209,28 @@ export default function HomePage() {
           <div className="mx-auto max-w-2xl lg:max-w-none">
             <div className="text-center">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Trusted by transportation businesses
+                {page.body_heading3}
               </h2>
               <p className="mt-4 text-lg leading-8 text-gray-600">
-                Join hundreds of successful companies who have grown their fleet with us
+                {page.body_sub_heading3}
               </p>
             </div>
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text6}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head6}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Happy Clients</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">100+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text7}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head7}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Years Experience</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">5+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text8}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head8}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Success Rate</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">98%</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text9}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head9}</dd>
               </div>
             </dl>
           </div>
@@ -154,21 +242,20 @@ export default function HomePage() {
         <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Ready to expand your fleet?
+              {page.section_head}
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-red-100">
-              Get in touch with our team today and discover how we can help you 
-              grow your transportation business.
+              {page.section_text}
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link to="/contact">
                 <Button size="lg" className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-white hover:to-white hover:text-primary transform transition duration-300 ease-in-out hover:scale-105">
-                  Contact Us
+                  {page.section_primary_btn}
                 </Button>
               </Link>
               <Link to="/services">
                 <Button variant="ghost" size="lg" className="border-2 border-white text-gray-200 hover:bg-white hover:text-primary hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
-                  Learn More
+                  {page.section_secondary_btn}
                 </Button>
               </Link>
             </div>
