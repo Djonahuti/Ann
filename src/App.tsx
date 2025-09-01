@@ -12,6 +12,7 @@ import AdminPages from '@/pages/admin/Pages'
 import AdminLogin from '@/pages/admin/Login'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { Toaster } from 'sonner'
+import PageEdit from './pages/admin/PageEdit'
 
 function App() {
   return (
@@ -31,6 +32,8 @@ function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
               <Route path="pages" element={<ProtectedRoute><AdminPages /></ProtectedRoute>} />
+              <Route path="/admin/pages/new" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />
+              <Route path="/admin/pages/edit/:id" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />              
             </Route>
             <Route path="/admin/login" element={<AdminLogin />} />
           </Routes>
