@@ -1,6 +1,85 @@
+import { supabase } from '@/lib/supabase'
 import { Bus, Target, Eye, Users, Award, Globe } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+interface Page {
+  id: string
+  title: string
+  slug: string
+  is_published: boolean
+  text: string | null
+  hero_big_black: string | null
+  hero_big_primary: string | null
+  hero_text: string | null
+  body_heading: string | null
+  body_first_text: string | null
+  body_second_text: string | null
+  body_heading2: string | null
+  body_sub_heading2: string | null
+  body_heading3: string | null
+  body_sub_heading3: string | null
+  body_heading4: string | null
+  body_sub_heading4: string | null
+  section_text: string | null
+  team_text: string | null
+  team_role: string | null
+  team_text2: string | null
+  team_role2: string | null
+  team_text3: string | null
+  team_role3: string | null
+  box_head: string | null
+  box_text: string | null
+  box_head2: string | null
+  box_text2: string | null
+  box_head3: string | null
+  box_text3: string | null
+  box_head4: string | null
+  box_text4: string | null
+  box_head5: string | null
+  box_text5: string | null
+  box_head6: string | null
+  box_text6: string | null
+  box_head7: string | null
+  box_text7: string | null
+  box_head8: string | null
+  box_text8: string | null
+  box_head9: string | null
+  box_text9: string | null
+}
 
 export default function AboutPage() {
+  const [page, setPage] = useState<Page | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchPage()
+  }, [])
+
+  const fetchPage = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('pages')
+      .select('*')
+      .eq('slug', 'about')
+      .eq('is_published', true)
+      .single()
+
+    if (error) {
+      console.error('Error fetching page:', error.message)
+    } else {
+      setPage(data)
+    }
+    setLoading(false)
+  }
+
+  if (loading) {
+    return <div className="p-12 text-center">Loading...</div>
+  }
+
+  if (!page) {
+    return <div className="p-12 text-center text-red-500">About page not found.</div>
+  }
+
   return (
     <div className='playfair-display'>
       {/* Hero Section */}
@@ -8,10 +87,10 @@ export default function AboutPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              About <span className='text-primary'>Annhurst Transport</span>
+              {page.hero_big_black} <span className='text-primary'>{page.hero_big_primary}</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-800 max-w-3xl mx-auto">
-              Leading the way in bus higher purchase solutions across Nigeria and beyond
+              {page.hero_text}
             </p>
           </div>
         </div>
@@ -24,14 +103,10 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold tracking-tight text-primary sm:text-4xl">
-                  Our Story
+                  {page.body_heading}
                 </h2>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Founded with a vision to democratize investment opportunities in Nigeria, Annhurst Transport Services Limited has been at the forefront of providing accessible, profitable investment options for individuals and businesses across the country.
-                </p>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
-                  With over 5 years of proven excellence, we have built a reputation for reliability, transparency, and consistent returns. Our expertise spans across transportation, real estate, and business expansion sectors, making us your one-stop solution for investment opportunities.
-                </p>
+                <p className="mt-6 text-lg leading-8 text-gray-600">{page.body_first_text}</p>
+                <p className="mt-6 text-lg leading-8 text-gray-600">{page.body_second_text}</p>
               </div>
               <div className="relative">
                 <div className="aspect-[4/3] rounded-2xl bg-gray-900/5 object-cover">
@@ -50,9 +125,9 @@ export default function AboutPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary">Our Purpose</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">{page.body_sub_heading2}</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Driving growth in transportation
+              {page.body_heading2}
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -60,22 +135,19 @@ export default function AboutPage() {
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex items-center gap-x-3 mb-4">
                   <Target className="h-8 w-8 text-primary" />
-                  <h3 className="text-xl font-semibold text-gray-900">Our Mission</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{page.box_head}</h3>
                 </div>
                 <p className="text-lg leading-8 text-gray-600">
-                  To provide accessible, reliable, and innovative financing solutions that 
-                  empower transportation businesses to grow their fleets and expand their 
-                  operations, contributing to economic development across Nigeria.
+                  {page.box_text}
                 </p>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex items-center gap-x-3 mb-4">
                   <Eye className="h-8 w-8 text-primary" />
-                  <h3 className="text-xl font-semibold text-gray-900">Our Vision</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">{page.box_head2}</h3>
                 </div>
                 <p className="text-lg leading-8 text-gray-600">
-                  To be the leading provider of transportation financing solutions in West Africa, 
-                  recognized for our innovation, reliability, and commitment to customer success.
+                  {page.box_text2}
                 </p>
               </div>
             </div>
@@ -87,9 +159,9 @@ export default function AboutPage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary">Our Values</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">{page.body_sub_heading3}</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              The principles that guide us
+              {page.body_heading3}
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -98,30 +170,27 @@ export default function AboutPage() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
                   <Users className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold leading-7 text-gray-900">Customer First</h3>
+                <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head3}</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
-                  We put our customers at the heart of everything we do, ensuring their 
-                  success is our priority.
+                  {page.box_text3}
                 </p>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
                   <Award className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold leading-7 text-gray-900">Excellence</h3>
+                <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head4}</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
-                  We strive for excellence in all aspects of our business, from customer 
-                  service to financial solutions.
+                  {page.box_text4}
                 </p>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:p-4 hover:rounded-lg hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-text-primary mb-4">
                   <Globe className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold leading-7 text-gray-900">Innovation</h3>
+                <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head5}</h3>
                 <p className="mt-4 text-base leading-7 text-gray-600">
-                  We continuously innovate our services to meet the evolving needs of 
-                  the transportation industry.
+                  {page.box_text5}
                 </p>
               </div>
             </div>
@@ -133,13 +202,12 @@ export default function AboutPage() {
       <div className="bg-gray-50 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary">Our Team</h2>
+            <h2 className="text-base font-semibold leading-7 text-primary">{page.body_sub_heading4}</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Meet the experts behind our success
+              {page.body_heading4}
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Our team of experienced professionals brings together decades of expertise 
-              in transportation finance, customer service, and business development.
+              {page.section_text}
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
@@ -148,22 +216,22 @@ export default function AboutPage() {
                 <div className="mx-auto h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center mb-4">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Management Team</h3>
-                <p className="text-gray-600">Strategic leadership and vision</p>
+                <h3 className="text-lg font-semibold text-gray-900">{page.team_role}</h3>
+                <p className="text-gray-600">{page.team_text}</p>
               </div>
               <div className="text-center">
                 <div className="mx-auto h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center mb-4">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Finance Experts</h3>
-                <p className="text-gray-600">Specialized in transportation financing</p>
+                <h3 className="text-lg font-semibold text-gray-900">{page.team_role2}</h3>
+                <p className="text-gray-600">{page.team_text2}</p>
               </div>
               <div className="text-center">
                 <div className="mx-auto h-32 w-32 rounded-full bg-gray-200 flex items-center justify-center mb-4">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Customer Support</h3>
-                <p className="text-gray-600">Dedicated to your success</p>
+                <h3 className="text-lg font-semibold text-gray-900">{page.team_role3}</h3>
+                <p className="text-gray-600">{page.team_text3}</p>
               </div>
             </div>
           </div>
@@ -176,25 +244,25 @@ export default function AboutPage() {
           <div className="mx-auto max-w-2xl lg:max-w-none">
             <div className="text-center">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Our impact in numbers
+                {page.text}
               </h2>
             </div>
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Years in Business</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">5+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text6}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head6}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Buses Financed</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">200+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text7}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head7}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Satisfied Clients</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">100+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text8}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head8}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">Team Members</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">25+</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text9}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head9}</dd>
               </div>
             </dl>
           </div>
