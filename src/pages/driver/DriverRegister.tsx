@@ -14,7 +14,7 @@ const schema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   dob: z.string().min(4, 'Date of birth is required'),
   nin: z.string().min(11, 'NIN is required'),
-  phones: z.array(z.string().min(7, 'Phone number must be at least 7 characters')).min(1, 'At least one phone number is required'),
+  phones: z.array(z.string().min(11, 'Phone number must be at least 7 characters')).min(1, 'At least one phone number is required'),
   addresses: z.array(z.string().min(4, 'Address must be at least 4 characters')).min(1, 'At least one address is required'),
 });
 
