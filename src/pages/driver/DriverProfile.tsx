@@ -1,30 +1,61 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/lib/supabase';
 
-// Dummy user data, replace with actual API/user context
-const user = {
-  name: 'John Doe',
-  email: 'john@example.com',
-  avatar: '',
-  dob: '1990-01-01',
-  nin: '12345678',
-  phone: ['08012345678'],
-  address: ['123 Business District, Victoria Island, Lagos'],
-  kyc: true,
-  role: 'driver',
-};
+interface Driver {
+  name: string;
+  email: string;
+  avatar: string;
+  dob: string;
+  nin: string;
+  phone: string[];
+  address: string[];
+  kyc: boolean;
+}
 
 export default function DriverProfile() {
+  const [user, setUser] = useState<Driver | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If not logged in, redirect to login
-    // Replace with actual auth check
-    if (!user) {
-      navigate('/login');
-    }
-  }, [navigate]);
+    const fetchUser = async () => {
+      const {data: { user } } = await supabase.auth.getUser();
+      if (!user) return navigate('/login');
+      const { data: driver, error } = await supabase
+        .from('driver')
+        .select('*')
+        .eq('email', user.email)
+        .single();
+      if (error || !driver) {
+        alert('Failed to fetch driver data');
+        return navigate('/login');
+      } else {
+        setUser(driver as Driver);
+      }
+      setLoading(false);  
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="max-w-md mx-auto py-12">
@@ -51,11 +82,8 @@ export default function DriverProfile() {
         <div>
           <span className="font-semibold">KYC:</span> {user.kyc ? 'Verified' : 'Not Verified'}
         </div>
-        <div>
-          <span className="font-semibold">Role:</span> {user.role}
-        </div>
       </div>
-      <Button className="mt-8 w-full" onClick={() => navigate('/driver/login')}>Logout</Button>
+      <Button className="mt-8 w-full" onClick={handleLogout}>Logout</Button>
     </div>
   );
 }

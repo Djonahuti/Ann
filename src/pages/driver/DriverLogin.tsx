@@ -26,13 +26,11 @@ export default function DriverLogin() {
     setLoading(true);
     try {
       // Query driver table for matching email and password
-      const { data: driver, error } = await supabase
-        .from('driver')
-        .select('*')
-        .eq('email', data.email)
-        .eq('password', data.password)
-        .single();
-      if (error || !driver) throw new Error('Invalid email or password');
+const { data: { user }, error } = await supabase.auth.signInWithPassword({
+  email: data.email,
+  password: data.password,
+});
+if (error || !user) throw new Error('Invalid email or password');
 
       setLoading(false);
       navigate('/profile');
