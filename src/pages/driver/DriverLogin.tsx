@@ -62,6 +62,11 @@ if (error || !user) throw new Error('Invalid email or password');
           {loading ? 'Logging in...' : 'Login'}
         </Button>
       </form>
+      <div className='mt-4'>
+        <h3 className="text-sm leading-tight text-primary">
+          Note: <span className='text-gray-600'>Request for your login credentials from your coordinator</span>
+        </h3>
+      </div>
     </div>
   );
 }

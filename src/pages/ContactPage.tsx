@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import { Link } from 'react-router-dom'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -57,6 +58,17 @@ export default function ContactPage() {
               Ready to expand your bus fleet? Get in touch with our team today and 
               discover how we can help you grow your transportation business.
             </p>
+          </div>
+          <div className='mt-8 flex justify-center'>
+            <Link to="/login">
+              <Button
+                variant="ghost"
+                size="lg"
+                className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 hover:border-none transform transition duration-300 ease-in-out hover:scale-105"
+              >
+                I have a bus
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
