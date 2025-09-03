@@ -35,7 +35,7 @@ export default function DriverLogin() {
       if (error || !driver) throw new Error('Invalid email or password');
 
       setLoading(false);
-      navigate('/driver/profile');
+      navigate('/profile');
     } catch (e: any) {
       setLoading(false);
       alert(e.message || 'Login failed');

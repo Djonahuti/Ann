@@ -28,7 +28,8 @@ create table public.users (
         (
           array[
             'admin'::character varying,
-            'user'::character varying
+            'user'::character varying,
+            'driver'::character varying
           ]
         )::text[]
       )

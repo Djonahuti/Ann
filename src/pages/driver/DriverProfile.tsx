@@ -22,7 +22,7 @@ export default function DriverProfile() {
     // If not logged in, redirect to login
     // Replace with actual auth check
     if (!user) {
-      navigate('/driver/login');
+      navigate('/login');
     }
   }, [navigate]);
 

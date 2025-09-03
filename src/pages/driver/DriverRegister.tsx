@@ -53,7 +53,7 @@ export default function DriverRegister() {
       if (userError) throw userError;
 
       setLoading(false);
-      navigate('/driver/profile');
+      navigate('/profile');
     } catch (e: any) {
       setLoading(false);
       alert(e.message || 'Registration failed');

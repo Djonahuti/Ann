@@ -13,6 +13,9 @@ import AdminLogin from '@/pages/admin/Login'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { Toaster } from 'sonner'
 import PageEdit from './pages/admin/PageEdit'
+import DriverLogin from './pages/driver/DriverLogin'
+import DriverRegister from './pages/driver/DriverRegister'
+import DriverProfile from './pages/driver/DriverProfile'
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
               <Route path="about" element={<AboutPage />} />
               <Route path="services" element={<ServicesPage />} />
               <Route path="contact" element={<ContactPage />} />
+              <Route path="login" element={<DriverLogin />} />
+              <Route path="signup" element={<DriverRegister />} />
+              <Route path="profile" element={<DriverProfile />} />
             </Route>
 
             {/* Admin Routes */}
