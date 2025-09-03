@@ -13,37 +13,93 @@ const schema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   dob: z.string().min(4, 'Date of birth is required'),
-  nin: z.string().min(8, 'NIN is required'),
-  phone: z.string().min(7, 'Phone is required'),
-  address: z.string().min(4, 'Address is required'),
+  nin: z.string().min(11, 'NIN is required'),
+  phones: z.array(z.string().min(7, 'Phone number must be at least 7 characters')).min(1, 'At least one phone number is required'),
+  addresses: z.array(z.string().min(4, 'Address must be at least 4 characters')).min(1, 'At least one address is required'),
 });
+
+type DriverRegisterForm = z.infer<typeof schema>;
 
 export default function DriverRegister() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [phoneInputs, setPhoneInputs] = useState(['']);
+  const [addressInputs, setAddressInputs] = useState(['']);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(schema) });
+    setValue,
+  } = useForm<DriverRegisterForm>({ 
+    resolver: zodResolver(schema),
+    defaultValues: {
+      phones: [''],
+      addresses: [''],
+    }
+  });
+
+  const addPhoneInput = () => {
+    setPhoneInputs([...phoneInputs, '']);
+    setValue('phones', [...phoneInputs, '']);
+  };
+
+  const removePhoneInput = (index: number) => {
+    const newPhones = phoneInputs.filter((_, i) => i !== index);
+    setPhoneInputs(newPhones);
+    setValue('phones', newPhones);
+  };
+
+  const updatePhoneInput = (index: number, value: string) => {
+    const newPhones = [...phoneInputs];
+    newPhones[index] = value;
+    setPhoneInputs(newPhones);
+    setValue('phones', newPhones);
+  };
+
+  const addAddressInput = () => {
+    setAddressInputs([...addressInputs, '']);
+    setValue('addresses', [...addressInputs, '']);
+  };
+
+  const removeAddressInput = (index: number) => {
+    const newAddresses = addressInputs.filter((_, i) => i !== index);
+    setAddressInputs(newAddresses);
+    setValue('addresses', newAddresses);
+  };
+
+  const updateAddressInput = (index: number, value: string) => {
+    const newAddresses = [...addressInputs];
+    newAddresses[index] = value;
+    setAddressInputs(newAddresses);
+    setValue('addresses', newAddresses);
+  };
 
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {
-      // Insert into driver table
+      // 1. Create auth user
+      const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: { data: { name: data.name } },
+      });
+      if (signUpError) throw signUpError;
+      if (!user) throw new Error("User not created");
+
+      // 2. Insert into driver table
       const { error: driverError } = await supabase.from('driver').insert({
         email: data.email,
         password: data.password,
         name: data.name,
         dob: data.dob,
         nin: data.nin,
-        phone: [data.phone],
-        address: [data.address],
+        phone: data.phones,
+        address: data.addresses,
         kyc: false,
       });
       if (driverError) throw driverError;
 
-      // Insert into users table with role 'driver'
+      // 3. Insert into users table with role 'driver'
       const { error: userError } = await supabase.from('users').insert({
         email: data.email,
         name: data.name,
@@ -100,17 +156,65 @@ export default function DriverRegister() {
           )}
         </div>
         <div>
-          <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" {...register('phone')} />
-          {errors.phone?.message && typeof errors.phone.message === 'string' && (
-            <p className="text-red-500 text-sm">{errors.phone.message}</p>
+          <Label>Phone Numbers</Label>
+          {phoneInputs.map((phone, index) => (
+            <div key={index} className="flex items-center space-x-2 mb-2">
+              <Input
+                id={`phone-${index}`}
+                value={phone}
+                onChange={(e) => updatePhoneInput(index, e.target.value)}
+                placeholder={`Phone number ${index + 1}`}
+              />
+              {phoneInputs.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removePhoneInput(index)}
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+          ))}
+          <Button type="button" onClick={addPhoneInput} className="mt-2">
+            Add Phone Number
+          </Button>
+          {errors.phones?.message && typeof errors.phones.message === 'string' && (
+            <p className="text-red-500 text-sm">{errors.phones.message}</p>
+          )}
+          {errors.phones?.[0]?.message && (
+            <p className="text-red-500 text-sm">{errors.phones[0].message}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="address">Address</Label>
-          <Input id="address" {...register('address')} />
-          {errors.address?.message && typeof errors.address.message === 'string' && (
-            <p className="text-red-500 text-sm">{errors.address.message}</p>
+          <Label>Addresses</Label>
+          {addressInputs.map((address, index) => (
+            <div key={index} className="flex items-center space-x-2 mb-2">
+              <Input
+                id={`address-${index}`}
+                value={address}
+                onChange={(e) => updateAddressInput(index, e.target.value)}
+                placeholder={`Address ${index + 1}`}
+              />
+              {addressInputs.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => removeAddressInput(index)}
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+          ))}
+          <Button type="button" onClick={addAddressInput} className="mt-2">
+            Add Address
+          </Button>
+          {errors.addresses?.message && typeof errors.addresses.message === 'string' && (
+            <p className="text-red-500 text-sm">{errors.addresses.message}</p>
+          )}
+          {errors.addresses?.[0]?.message && (
+            <p className="text-red-500 text-sm">{errors.addresses[0].message}</p>
           )}
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
