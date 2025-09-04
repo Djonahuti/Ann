@@ -16,6 +16,9 @@ import PageEdit from './pages/admin/PageEdit'
 import DriverLogin from './pages/driver/DriverLogin'
 import DriverRegister from './pages/driver/DriverRegister'
 import DriverProfile from './pages/driver/DriverProfile'
+import CoLogin from './pages/coordinator/CoLogin'
+import UserProfile from './pages/coordinator/CoProfile'
+import PaymentForm from './pages/coordinator/PaymentForm'
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
               <Route path="about" element={<AboutPage />} />
               <Route path="services" element={<ServicesPage />} />
               <Route path="contact" element={<ContactPage />} />
+              <Route path="signin" element={<CoLogin />} />
+              <Route path="payment/:id" element={<PaymentForm />} />
+              <Route path="user" element={<UserProfile />} />
               <Route path="login" element={<DriverLogin />} />
               <Route path="signup" element={<DriverRegister />} />
               <Route path="profile" element={<DriverProfile />} />
