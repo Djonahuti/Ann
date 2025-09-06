@@ -78,7 +78,7 @@ export default function DriverProfile() {
             agreed_date,
             t_income,
             initial_owe,
-            coordinator:users!buses_coordinator_fkey(name)
+            coordinator:coordinators!buses_coordinator_fkey(name)
           `)
           .eq('driver', driver.id);
         if (busError) {
