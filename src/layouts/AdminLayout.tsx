@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
-import { 
-  Menu, 
-  X, 
-  Home, 
-  FileText, 
-  Settings, 
-  LogOut, 
+import {
+  Menu,
+  X,
+  Home,
+  FileText,
+  Settings,
+  LogOut,
   User,
   ChevronDown
 } from 'lucide-react'
@@ -27,13 +27,19 @@ const navigation = [
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, signOut } = useAuth()
+  const { user, role, signOut } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (!user || role !== 'admin') {
+      navigate('/login') // or '/admin/login' if you want separate login
+    }
+  }, [user, role, navigate])
+
   const handleSignOut = async () => {
     await signOut()
-    navigate('/admin/login')
+    navigate('/login') // or '/admin/login'
   }
 
   return (
@@ -103,8 +109,8 @@ export default function AdminLayout() {
                           to={item.href}
                           className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                             isActive
-                          ? 'bg-red-50 text-primary border border-primary'
-                          : 'text-gray-700 hover:bg-primary hover:text-white transition-colors'
+                              ? 'bg-red-50 text-primary border border-primary'
+                              : 'text-gray-700 hover:bg-primary hover:text-white transition-colors'
                           }`}
                         >
                           <item.icon className="h-5 w-5 mr-3" />
@@ -165,4 +171,4 @@ export default function AdminLayout() {
       </div>
     </div>
   )
-} 
+}

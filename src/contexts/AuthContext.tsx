@@ -5,7 +5,8 @@ import { useSupabase } from './SupabaseContext'
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: (email: string, password: string) => Promise<{ error: any }>
+  role: 'driver' | 'admin' | 'coordinator' | null
+  signIn: (email: string, password: string) => Promise<{ error: any, role?: string }>
   signOut: () => Promise<void>
 }
 
@@ -15,6 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { supabase } = useSupabase()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [role, setRole] = useState<'driver' | 'admin' | 'coordinator' | null>(null)
 
   useEffect(() => {
     // Get initial session
@@ -34,16 +36,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error }
+    if (error) return { error }
+
+    // Check role tables
+    let foundRole: 'driver' | 'admin' | 'coordinator' | undefined = undefined
+
+    const { data: driver } = await supabase.from('driver').select('id').eq('email', email).single()
+    if (driver) foundRole = 'driver'
+
+    const { data: admin } = await supabase.from('admins').select('id').eq('email', email).single()
+    if (admin) foundRole = 'admin'
+
+    const { data: coordinator } = await supabase.from('coordinators').select('id').eq('email', email).single()
+    if (coordinator) foundRole = 'coordinator'
+
+    setRole(foundRole ?? null)
+    return { error: null, role: foundRole }
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    setRole(null)
   }
 
   const value = {
     user,
     loading,
+    role,
     signIn,
     signOut,
   }
