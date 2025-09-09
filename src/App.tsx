@@ -17,6 +17,7 @@ import DriverProfile from './pages/driver/DriverProfile'
 import UserProfile from './pages/coordinator/CoProfile'
 import PaymentForm from './pages/coordinator/PaymentForm'
 import LoginPage from './pages/Login'
+import AddBusPage from './pages/admin/AddBuses'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/admin/add-bus" element={<ProtectedRoute><AddBusPage /></ProtectedRoute>} />
               <Route path="pages" element={<ProtectedRoute><AdminPages /></ProtectedRoute>} />
               <Route path="/admin/pages/new" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />
               <Route path="/admin/pages/edit/:id" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />              

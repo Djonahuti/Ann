@@ -8,7 +8,8 @@ import {
   Settings,
   LogOut,
   User,
-  ChevronDown
+  ChevronDown,
+  Bus
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,7 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: Home },
+  { name: 'Add Bus', href: '/admin/add-bus', icon: Bus },
   { name: 'Pages', href: '/admin/pages', icon: FileText },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ]
