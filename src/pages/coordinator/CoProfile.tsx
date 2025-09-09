@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -61,6 +61,11 @@ export default function UserProfile() {
     fetchUserAndBuses();
   }, [navigate]);
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
+  }
+
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto py-12">
@@ -116,6 +121,9 @@ export default function UserProfile() {
             </Table>
           )}
         </CardContent>
+        <CardFooter className='flex justify-end'>
+          <Button variant="destructive" onClick={handleLogout}>Logout</Button>
+        </CardFooter>
       </Card>
     </div>
   );
