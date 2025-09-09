@@ -18,6 +18,8 @@ import UserProfile from './pages/coordinator/CoProfile'
 import PaymentForm from './pages/coordinator/PaymentForm'
 import LoginPage from './pages/Login'
 import AddBusPage from './pages/admin/AddBuses'
+import ViewPayments from './pages/admin/ViewPayments'
+import PaymentHistory from './pages/coordinator/PaymentHistory'
 
 function App() {
   return (
@@ -31,7 +33,8 @@ function App() {
               <Route path="about" element={<AboutPage />} />
               <Route path="services" element={<ServicesPage />} />
               <Route path="contact" element={<ContactPage />} />
-              <Route path="payment/:id" element={<PaymentForm />} />
+              <Route path="payment/:busId" element={<PaymentForm />} />
+              <Route path="payment/:busId/history" element={<PaymentHistory />} />
               <Route path="user" element={<UserProfile />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="signup" element={<DriverRegister />} />
@@ -42,6 +45,7 @@ function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
               <Route path="/admin/add-bus" element={<ProtectedRoute><AddBusPage /></ProtectedRoute>} />
+              <Route path="/admin/payments" element={<ProtectedRoute><ViewPayments /></ProtectedRoute>} />
               <Route path="pages" element={<ProtectedRoute><AdminPages /></ProtectedRoute>} />
               <Route path="/admin/pages/new" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />
               <Route path="/admin/pages/edit/:id" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />              
