@@ -1,5 +1,4 @@
-// src/pages/payment/PaymentForm.tsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,19 +24,20 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // ✅ Define schema for validation based on payment table
 const paymentSchema = z.object({
   week: z.string().nonempty("Week is required"), // ISO date string
-  coordinator: z.string().nonempty("Coordinator is required"),
+  coordinator: z.enum(["Cleophas", "Emmanuel", "Roland", "Mukaila"], { required_error: "Coordinator is required" }),
   bus: z.number().int().positive(),
   p_week: z.string().nullable(),
-  receipt: z.string().nullable(),
+  receipt: z.any().refine((file) => file?.length > 0, "Receipt is required"),
   amount: z.coerce.number().int().nonnegative(),
   sender: z.string().nullable(),
-  payment_day: z.string().nullable(),
+  payment_day: z.enum(["MON", "TUE", "WED", "THU", "FRIDAY", "SAT", "SUN"], { required_error: "Day of the Week is required" }),
   payment_date: z.string().nonempty("Payment date is required"), // ISO date
-  pay_type: z.string().nonempty("Payment type is required"),
+  pay_type: z.enum(["CASH", "ACCOUNT"], { required_error: "Payment type is required" }),
   pay_complete: z.boolean().default(false),
   issue: z.string().nullable(),
   inspection: z.boolean().default(false),
@@ -50,20 +50,21 @@ export default function PaymentForm() {
   const { user, role } = useAuth();
   const { supabase } = useSupabase();
   const navigate = useNavigate();
+  const [busCode, setBusCode] = useState<string>("");  
 
   const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
       week: "",
-      coordinator: user?.email ?? "",
+      coordinator: undefined,
       bus: Number(busId),
       p_week: "",
       receipt: "",
       amount: 0,
       sender: "",
-      payment_day: "",
+      payment_day: undefined,
       payment_date: "",
-      pay_type: "",
+      pay_type: "CASH",
       pay_complete: false,
       issue: "",
       inspection: false,
@@ -74,15 +75,54 @@ export default function PaymentForm() {
     if (!user || role !== "coordinator") {
       navigate("/login");
     }
-  }, [user, role, navigate]);
+    // fetch bus_code
+    const fetchBusCode = async () => {
+      const { data } = await supabase.from("buses").select("bus_code").eq("id", busId).single();
+      setBusCode(data?.bus_code || `BUS${busId}`);
+      form.setValue("bus", Number(busId)); // still keep the id for DB insert
+    };
+    fetchBusCode();
+  }, [user, role, supabase, busId, navigate]);
 
   const onSubmit = async (values: PaymentFormValues) => {
-    const { error } = await supabase.from("payment").insert([values]);
-    if (error) {
-      console.error("Payment insert error:", error);
+    const file = values.receipt?.[0];
+    if (!file) {
+      alert("Receipt file is required");
       return;
     }
-    navigate(`/payment/${busId}/history`); // back to coordinator profile
+
+    // ✅ Generate filename
+    const ext = file.name.split(".").pop();
+    const formattedDate = values.payment_date.split("-").reverse().join(".");
+    const newFileName = `${busCode},N${values.amount},${formattedDate},DR Receipt.${ext}`;
+
+    // ✅ Upload to Supabase Storage bucket "receipts"
+    const { error: uploadError } = await supabase.storage
+      .from("receipts")
+      .upload(newFileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("Upload error:", uploadError);
+      return;
+    }
+
+    // ✅ Insert payment record (store only filename)
+    const { error: insertError } = await supabase.from("payment").insert([
+      {
+        ...values,
+        receipt: newFileName,
+      },
+    ]);
+
+    if (insertError) {
+      console.error("Insert error:", insertError);
+      return;
+    }
+
+    navigate(`/payment/${busId}/history`);
   };
 
   return (
@@ -113,24 +153,37 @@ export default function PaymentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Coordinator</FormLabel>
-                    <FormControl>
-                      <Input type="text" readOnly {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Coordinator" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Cleophas">Cleophas</SelectItem>
+                        <SelectItem value="Emmanuel">Emmanuel</SelectItem>
+                        <SelectItem value="Roland">Roland</SelectItem>
+                        <SelectItem value="Mukaila">Mukaila</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+              {/* Bus Code (read-only) */}
               <FormField
                 control={form.control}
                 name="bus"
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
-                    <FormLabel>Bus ID</FormLabel>
+                    <FormLabel>Bus Code</FormLabel>
                     <FormControl>
-                      <Input type="number" readOnly {...field} />
+                      <Input type="text" value={busCode} readOnly />
                     </FormControl>
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="amount"
@@ -150,9 +203,17 @@ export default function PaymentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Payment Type</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Cash, Transfer" {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select payment type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="CASH">CASH</SelectItem>
+                        <SelectItem value="ACCOUNT">ACCOUNT</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -170,16 +231,21 @@ export default function PaymentForm() {
                   </FormItem>
                 )}
               />
-              {/* Optional fields */}
+              {/* Receipt Upload */}
               <FormField
                 control={form.control}
                 name="receipt"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Receipt</FormLabel>
+                    <FormLabel>Receipt (Image or PDF)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Receipt No." {...field} value={field.value ?? ""} />
+                      <Input
+                        type="file"
+                        accept=".pdf,.jpeg,.jpg,.png,.avif"
+                        onChange={(e) => field.onChange(e.target.files)}
+                      />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -201,9 +267,23 @@ export default function PaymentForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Payment Day</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Day of Week" {...field} value={field.value ?? ""} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Day of Week" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="MON">MON</SelectItem>
+                        <SelectItem value="TUE">TUE</SelectItem>
+                        <SelectItem value="WED">WED</SelectItem>
+                        <SelectItem value="THU">THU</SelectItem>
+                        <SelectItem value="FRI">FRI</SelectItem>
+                        <SelectItem value="SAT">SAT</SelectItem>
+                        <SelectItem value="SUN">SUN</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
