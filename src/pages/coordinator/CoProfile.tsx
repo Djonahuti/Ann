@@ -132,7 +132,14 @@ export default function UserProfile() {
                         size="sm"
                         onClick={() => navigate(`/payment/${bus.id}`)}
                       >
-                        Make Payment
+                        Post Payment
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => navigate(`/payment/${bus.id}/history`)}
+                      >
+                        View Payments
                       </Button>
                     </TableCell>
                   </TableRow>
