@@ -61,7 +61,9 @@ export default function AdminDrivers() {
       .from("driver")
       .select(`
         id, name, email, phone, address,
-        buses: buses (bus_code, plate_no)
+        buses:buses!buses_driver_fkey (
+          bus_code, plate_no
+        )
       `);
 
     if (error) {
@@ -75,8 +77,8 @@ export default function AdminDrivers() {
       email: d.email,
       phone: d.phone,
       address: d.address,
-      bus_code: d.buses?.bus_code || null,
-      plate_no: d.buses?.plate_no || null,
+      bus_code: d.buses?.[0]?.bus_code || null,
+      plate_no: d.buses?.[0]?.plate_no || null,
     }));
 
     setDrivers(formatted);
