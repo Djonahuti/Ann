@@ -8,8 +8,8 @@ interface Payment {
   id: number
   amount: number | null
   pay_type: string | null
-  pay_complete: boolean | null
-  bus: { bus_code: string | null, plate_no: string | null } | null
+  pay_complete: string | null   // ✅ text now
+  bus: { bus_code: string | null, plate_no: string | null, e_payment: number | null } | null
   coordinator: string | null
   created_at: string
 }
@@ -30,12 +30,11 @@ export default function ViewPayments() {
           pay_complete,
           created_at,
           coordinator,
-          bus:buses(bus_code, plate_no)
+          bus:buses(bus_code, plate_no, e_payment)
         `)
         .order('created_at', { ascending: false })
 
       if (!error && data) {
-        // Map bus array to single object
         setPayments(
           data.map((p: any) => ({
             ...p,
@@ -66,6 +65,7 @@ export default function ViewPayments() {
                 <TableHead>ID</TableHead>
                 <TableHead>Bus</TableHead>
                 <TableHead>Coordinator</TableHead>
+                <TableHead>Expected Amount</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
@@ -78,9 +78,45 @@ export default function ViewPayments() {
                   <TableCell>{p.id}</TableCell>
                   <TableCell>{p.bus?.bus_code} ({p.bus?.plate_no})</TableCell>
                   <TableCell>{p.coordinator || 'N/A'}</TableCell>
+
+                  {/* ✅ Editable Expected Payment */}
+                  <TableCell>
+                    <input
+                      type="number"
+                      defaultValue={p.bus?.e_payment || 0}
+                      onBlur={async (e) => {
+                        const value = Number(e.target.value);
+                        await supabase
+                          .from("buses")
+                          .update({ e_payment: value })
+                          .eq("bus_code", p.bus?.bus_code);
+                      }}
+                      className="border rounded px-2 py-1 w-24"
+                    />
+                  </TableCell>
+
                   <TableCell>₦{p.amount?.toLocaleString() || 0}</TableCell>
                   <TableCell>{p.pay_type || 'N/A'}</TableCell>
-                  <TableCell>{p.pay_complete ? '✅ Completed' : '⏳ Pending'}</TableCell>
+
+                  {/* ✅ Editable Pay Status */}
+                  <TableCell>
+                    <select
+                      defaultValue={p.pay_complete || 'Pending'}
+                      onChange={async (e) => {
+                        const status = e.target.value
+                        await supabase
+                          .from('payment')
+                          .update({ pay_complete: status })
+                          .eq('id', p.id)
+                      }}
+                      className="border rounded px-2 py-1"
+                    >
+                      <option value="YES">YES</option>
+                      <option value="INCOMPLETE">INCOMPLETE</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                  </TableCell>
+
                   <TableCell>{new Date(p.created_at).toLocaleDateString()}</TableCell>
                 </TableRow>
               ))}
