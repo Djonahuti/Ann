@@ -112,7 +112,78 @@ create table public.payment (
   constraint payment_bus_fkey foreign KEY (bus) references buses (id) on delete set null
 ) TABLESPACE pg_default;
 
-INSERT INTO "public"."admins" ("id", "email", "role", "created_at", "name", "avatar", "password", "user_id") VALUES ('1', 'admin@annhurst.com', 'admin', '2025-09-06 19:05:45+00', 'Administrator', null, '123', null);
+create table public.pages (
+  id uuid not null default gen_random_uuid (),
+  title character varying(255) not null,
+  slug character varying(255) not null,
+  text text not null,
+  meta_description text null,
+  is_published boolean null default false,
+  created_at timestamp with time zone null default now(),
+  updated_at timestamp with time zone null default now(),
+  hero_big_black text null,
+  hero_big_primary text null,
+  hero_text text null,
+  hero_primary_button text null,
+  hero_secondary_button text null,
+  hero_year text null,
+  hero_year_span text null,
+  hero_100 text null,
+  hero_100_span text null,
+  hero_24 text null,
+  hero_24_span text null,
+  body_heading text null,
+  body_sub_heading text null,
+  body_first_text text null,
+  body_second_text text null,
+  body_heading2 text null,
+  body_sub_heading2 text null,
+  body_heading3 text null,
+  body_sub_heading3 text null,
+  body_heading4 text null,
+  body_sub_heading4 text null,
+  box_text text null,
+  box_head text null,
+  box_text2 text null,
+  box_head2 text null,
+  box_text3 text null,
+  box_head3 text null,
+  box_text4 text null,
+  box_head4 text null,
+  box_text5 text null,
+  box_head5 text null,
+  box_text6 text null,
+  box_head6 text null,
+  box_text7 text null,
+  box_head7 text null,
+  box_text8 text null,
+  box_head8 text null,
+  box_text9 text null,
+  box_head9 text null,
+  team_img text null,
+  team_text text null,
+  team_role text null,
+  team_img2 text null,
+  team_text2 text null,
+  team_role2 text null,
+  team_img3 text null,
+  team_text3 text null,
+  team_role3 text null,
+  section_head text null,
+  section_text text null,
+  section_primary_btn text null,
+  section_secondary_btn text null,
+  hp text[] null,
+  fm text[] null,
+  constraint pages_pkey primary key (id),
+  constraint pages_slug_key unique (slug)
+) TABLESPACE pg_default;
+
+create index IF not exists idx_pages_slug on public.pages using btree (slug) TABLESPACE pg_default;
+
+create index IF not exists idx_pages_published on public.pages using btree (is_published) TABLESPACE pg_default;
+
+INSERT INTO "public"."admins" ("id", "email", "role", "created_at", "name", "avatar", "password", "user_id") VALUES ('1', 'admin@annhurst-gsl.com', 'admin', '2025-09-06 19:05:45+00', 'Administrator', null, '123', null);
 
 INSERT INTO "public"."coordinators" ("id", "created_at", "email", "password", "name", "avatar", "phone", "user_id") VALUES ('1', '2025-09-03 21:04:44+00', 'chuksmanny97@gmail.com', '123', 'Emmanuel', null, '"{\"09054257289\"]}', '8f05ba64-005d-4c56-b426-3badd4596c0f'), ('2', '2025-09-03 21:09:27+00', 'abisomukailaabiso@gmail.com', '123', 'Mukaila', null, '"{\"09063750685\"]}', '646ee4e2-f49f-4789-bb75-0bec72a64d60'), ('3', '2025-09-03 21:11:16+00', 'rolandogbaisi75@gmail.com', '123', 'Roland', null, '"{\"08122574825\"]}', 'd74e5de5-02e4-4bd1-9249-92ca931012f5'), ('4', '2025-09-03 21:12:50+00', 'cereoah@annhurst-gsl.com', '123', 'Cleophas', null, '"{\"07065226741\"]}', '1a145b44-0dc3-41d1-b024-36fbca710578');
 
