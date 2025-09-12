@@ -27,8 +27,11 @@ interface Driver {
   email: string | null;
   phone: string[] | null;
   address: string[] | null;
+  bus_id: number | null;
   bus_code: string | null;
   plate_no: string | null;
+  coordinator_id: number | null;
+  coordinator_name: string | null;
 }
 
 const driverSchema = z.object({
@@ -36,7 +39,8 @@ const driverSchema = z.object({
   email: z.string().email("Invalid email"),
   phone: z.string().optional(),
   address: z.string().optional(),
-  bus_id: z.string().optional(), // for assigning bus
+  bus_id: z.string().optional(),
+  coordinator_id: z.string().optional(),
 });
 
 type DriverFormValues = z.infer<typeof driverSchema>;
@@ -50,10 +54,13 @@ export default function AdminDrivers() {
   const [loading, setLoading] = useState(true);
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null);
   const [buses, setBuses] = useState<any[]>([]);
+  const [coordinators, setCoordinators] = useState<any[]>([]);
+  const [filterCoordinator, setFilterCoordinator] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"bus" | "driver">("bus");
 
   const form = useForm<DriverFormValues>({
     resolver: zodResolver(driverSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "", bus_id: "" },
+    defaultValues: { name: "", email: "", phone: "", address: "", bus_id: "", coordinator_id: "" },
   });
 
   useEffect(() => {
@@ -63,6 +70,7 @@ export default function AdminDrivers() {
     }
     fetchDrivers();
     fetchBuses();
+    fetchCoordinators();
   }, [user, role, navigate]);
 
   const fetchDrivers = async () => {
@@ -70,7 +78,10 @@ export default function AdminDrivers() {
       .from("driver")
       .select(`
         id, name, email, phone, address,
-        buses:buses!buses_driver_fkey (bus_code, plate_no, id)
+        buses:buses!buses_driver_fkey (
+          id, bus_code, plate_no,
+          coordinators:coordinators!buses_coordinator_fkey (id, name, email)
+        )
       `);
 
     if (error) {
@@ -84,72 +95,66 @@ export default function AdminDrivers() {
       email: d.email,
       phone: d.phone,
       address: d.address,
+      bus_id: d.buses?.[0]?.id || null,
       bus_code: d.buses?.[0]?.bus_code || null,
       plate_no: d.buses?.[0]?.plate_no || null,
+      coordinator_id: d.buses?.[0]?.coordinators?.id || null,
+      coordinator_name: d.buses?.[0]?.coordinators?.name || null,
     }));
 
-    // ✅ sort by bus_code alphabetically, put Unassigned last
-    formatted.sort((a, b) => {
-      if (!a.bus_code && !b.bus_code) return 0;
-      if (!a.bus_code) return 1;
-      if (!b.bus_code) return -1;
-      return a.bus_code.localeCompare(b.bus_code);
-    });
-
-    setDrivers(formatted);
+    setDrivers(sortDrivers(formatted, sortBy));
     setLoading(false);
   };
 
   const fetchBuses = async () => {
     const { data, error } = await supabase
       .from("buses")
-      .select("id, bus_code, plate_no, driver");
-    if (error) {
-      console.error("Error fetching buses:", error);
-      return;
-    }
+      .select("id, bus_code, plate_no, driver, coordinator");
+    if (error) console.error("Error fetching buses:", error);
     setBuses(data || []);
+  };
+
+  const fetchCoordinators = async () => {
+    const { data, error } = await supabase
+      .from("coordinators")
+      .select("id, name, email");
+    if (error) console.error("Error fetching coordinators:", error);
+    setCoordinators(data || []);
   };
 
   const handleEdit = (driver: Driver) => {
     setEditingDriver(driver);
-    const assignedBus = buses.find((b) => b.driver === driver.id);
     form.reset({
       name: driver.name || "",
       email: driver.email || "",
       phone: driver.phone?.[0] || "",
       address: driver.address?.[0] || "",
-      bus_id: assignedBus ? String(assignedBus.id) : "",
+      bus_id: driver.bus_id ? String(driver.bus_id) : "",
+      coordinator_id: driver.coordinator_id ? String(driver.coordinator_id) : "",
     });
   };
 
   const onSubmit = async (values: DriverFormValues) => {
     if (!editingDriver) return;
 
-    // Update driver info
-    const { error: driverError } = await supabase
-      .from("driver")
-      .update({
-        name: values.name,
-        email: values.email,
-        phone: values.phone ? [values.phone] : null,
-        address: values.address ? [values.address] : null,
-      })
-      .eq("id", editingDriver.id);
+    // update driver info
+    await supabase.from("driver").update({
+      name: values.name,
+      email: values.email,
+      phone: values.phone ? [values.phone] : null,
+      address: values.address ? [values.address] : null,
+    }).eq("id", editingDriver.id);
 
-    if (driverError) {
-      console.error("Update driver error:", driverError);
-      return;
-    }
-
-    // Clear previous bus assignment
+    // clear any previous bus assignment
     await supabase.from("buses").update({ driver: null }).eq("driver", editingDriver.id);
 
-    // Assign new bus if selected
     if (values.bus_id) {
       await supabase
         .from("buses")
-        .update({ driver: editingDriver.id })
+        .update({
+          driver: editingDriver.id,
+          coordinator: values.coordinator_id ? Number(values.coordinator_id) : null,
+        })
         .eq("id", values.bus_id);
     }
 
@@ -158,16 +163,79 @@ export default function AdminDrivers() {
     fetchBuses();
   };
 
+  // sorting
+  const sortDrivers = (list: Driver[], key: "bus" | "driver") => {
+    const sorted = [...list];
+    if (key === "bus") {
+      sorted.sort((a, b) => {
+        if (!a.bus_code && !b.bus_code) return 0;
+        if (!a.bus_code) return 1;
+        if (!b.bus_code) return -1;
+        return a.bus_code.localeCompare(b.bus_code);
+      });
+    } else {
+      sorted.sort((a, b) => {
+        if (!a.name && !b.name) return 0;
+        if (!a.name) return 1;
+        if (!b.name) return -1;
+        return a.name.localeCompare(b.name);
+      });
+    }
+    return sorted;
+  };
+
+  const handleSortChange = (key: "bus" | "driver") => {
+    setSortBy(key);
+    setDrivers(sortDrivers(drivers, key));
+  };
+
   if (loading) return <p className="p-6">Loading drivers...</p>;
+
+  const visibleDrivers = drivers.filter((d) =>
+    filterCoordinator === "all" ? true : d.coordinator_id === Number(filterCoordinator)
+  );
 
   return (
     <div className="max-w-6xl mx-auto py-10">
       <Card>
-        <CardHeader>
+        <CardHeader className="flex justify-between items-center">
           <CardTitle>Drivers & Assigned Buses</CardTitle>
+          <div className="flex gap-4 items-center">
+            <div className="space-x-2">
+              <Button
+                size="sm"
+                variant={sortBy === "bus" ? "default" : "outline"}
+                onClick={() => handleSortChange("bus")}
+              >
+                Sort by Bus
+              </Button>
+              <Button
+                size="sm"
+                variant={sortBy === "driver" ? "default" : "outline"}
+                onClick={() => handleSortChange("driver")}
+              >
+                Sort by Driver
+              </Button>
+            </div>
+            <div>
+              <label className="mr-2 font-medium">Filter by Coordinator:</label>
+              <select
+                value={filterCoordinator}
+                onChange={(e) => setFilterCoordinator(e.target.value)}
+                className="border rounded p-2"
+              >
+                <option value="all">All</option>
+                {coordinators.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          {drivers.length === 0 ? (
+          {visibleDrivers.length === 0 ? (
             <p>No drivers found.</p>
           ) : (
             <Table>
@@ -178,17 +246,19 @@ export default function AdminDrivers() {
                   <TableHead>Phone</TableHead>
                   <TableHead>Bus Code</TableHead>
                   <TableHead>Plate No</TableHead>
+                  <TableHead>Coordinator</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {drivers.map((d) => (
+                {visibleDrivers.map((d) => (
                   <TableRow key={d.id}>
                     <TableCell>{d.name || "N/A"}</TableCell>
                     <TableCell>{d.email || "N/A"}</TableCell>
                     <TableCell>{d.phone?.join(", ") || "N/A"}</TableCell>
                     <TableCell>{d.bus_code || "Unassigned"}</TableCell>
                     <TableCell>{d.plate_no || "N/A"}</TableCell>
+                    <TableCell>{d.coordinator_name || "Unassigned"}</TableCell>
                     <TableCell>
                       <Dialog>
                         <DialogTrigger asChild>
@@ -261,8 +331,6 @@ export default function AdminDrivers() {
                                   </FormItem>
                                 )}
                               />
-
-                              {/* Bus Assignment */}
                               <FormField
                                 control={form.control}
                                 name="bus_id"
@@ -284,7 +352,27 @@ export default function AdminDrivers() {
                                   </FormItem>
                                 )}
                               />
-
+                              <FormField
+                                control={form.control}
+                                name="coordinator_id"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Assigned Coordinator</FormLabel>
+                                    <select
+                                      value={field.value || ""}
+                                      onChange={(e) => field.onChange(e.target.value)}
+                                      className="w-full border rounded p-2"
+                                    >
+                                      <option value="">Unassigned</option>
+                                      {coordinators.map((c) => (
+                                        <option key={c.id} value={c.id}>
+                                          {c.name} ({c.email})
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </FormItem>
+                                )}
+                              />
                               <div className="flex justify-end gap-2">
                                 <Button
                                   type="button"
