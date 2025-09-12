@@ -38,17 +38,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error }
 
-    // Check role tables
+    // Check role tables and banned status
     let foundRole: 'driver' | 'admin' | 'coordinator' | undefined = undefined
+    let banned = false;
 
-    const { data: driver } = await supabase.from('driver').select('id').eq('email', email).single()
-    if (driver) foundRole = 'driver'
+    const { data: driver } = await supabase.from('driver').select('id, banned').eq('email', email).single()
+    if (driver) {
+      foundRole = 'driver';
+      if (driver.banned) banned = true;
+    }
 
-    const { data: admin } = await supabase.from('admins').select('id').eq('email', email).single()
-    if (admin) foundRole = 'admin'
+    const { data: admin } = await supabase.from('admins').select('id, banned').eq('email', email).single()
+    if (admin) {
+      foundRole = 'admin';
+      if (admin.banned) banned = true;
+    }
 
-    const { data: coordinator } = await supabase.from('coordinators').select('id').eq('email', email).single()
-    if (coordinator) foundRole = 'coordinator'
+    const { data: coordinator } = await supabase.from('coordinators').select('id, banned').eq('email', email).single()
+    if (coordinator) {
+      foundRole = 'coordinator';
+      if (coordinator.banned) banned = true;
+    }
+
+    if (banned) {
+      return { error: { message: 'Your account has been banned. Please contact support.' } };
+    }
 
     setRole(foundRole ?? null)
     return { error: null, role: foundRole }

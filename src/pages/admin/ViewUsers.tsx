@@ -14,6 +14,7 @@ export default function ViewUsers() {
   const [coordinators, setCoordinators] = useState<any[]>([]);
   const [admins, setAdmins] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [banLoading, setBanLoading] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user || role !== "admin") {
@@ -25,13 +26,20 @@ export default function ViewUsers() {
 
   const fetchAllUsers = async () => {
     setLoading(true);
-    const { data: driverData } = await supabase.from("driver").select("id, name, email, phone, address, kyc");
-    const { data: coordinatorData } = await supabase.from("coordinators").select("id, name, email, phone");
-    const { data: adminData } = await supabase.from("admins").select("id, name, email, role");
+    const { data: driverData } = await supabase.from("driver").select("id, name, email, phone, address, kyc, banned");
+    const { data: coordinatorData } = await supabase.from("coordinators").select("id, name, email, phone, banned");
+    const { data: adminData } = await supabase.from("admins").select("id, name, email, role, banned");
     setDrivers(driverData || []);
     setCoordinators(coordinatorData || []);
     setAdmins(adminData || []);
     setLoading(false);
+  };
+
+  const handleBanToggle = async (table: string, id: string | number, banned: boolean) => {
+    setBanLoading(`${table}-${id}`);
+    await supabase.from(table).update({ banned: !banned }).eq("id", id);
+    await fetchAllUsers();
+    setBanLoading(null);
   };
 
   if (loading) {
@@ -56,18 +64,30 @@ export default function ViewUsers() {
                   <TableHead>Phone</TableHead>
                   <TableHead>Address</TableHead>
                   <TableHead>KYC</TableHead>
+                  <TableHead>Ban</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {drivers.map((d) => (
-                  <TableRow key={d.id}>
-                    <TableCell>{d.name}</TableCell>
-                    <TableCell>{d.email}</TableCell>
-                    <TableCell>{Array.isArray(d.phone) ? d.phone.join(", ") : d.phone}</TableCell>
-                    <TableCell>{Array.isArray(d.address) ? d.address.join(", ") : d.address}</TableCell>
-                    <TableCell>{d.kyc ? "Verified" : "Not Verified"}</TableCell>
-                  </TableRow>
-                ))}
+                {drivers.map((d) => {
+                  return (
+                    <TableRow key={d.id}>
+                      <TableCell>{d.name}</TableCell>
+                      <TableCell>{d.email}</TableCell>
+                      <TableCell>{Array.isArray(d.phone) ? d.phone.join(", ") : d.phone}</TableCell>
+                      <TableCell>{Array.isArray(d.address) ? d.address.join(", ") : d.address}</TableCell>
+                      <TableCell>{d.kyc ? "Verified" : "Not Verified"}</TableCell>
+                      <TableCell>
+                        <button
+                          className={`px-3 py-1 rounded ${d.banned ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                          disabled={banLoading === `driver-${d.id}`}
+                          onClick={() => handleBanToggle('driver', d.id, d.banned)}
+                        >
+                          {banLoading === `driver-${d.id}` ? '...' : d.banned ? 'Unban' : 'Ban'}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </AccordionContent>
@@ -81,16 +101,28 @@ export default function ViewUsers() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Phone</TableHead>
+                  <TableHead>Ban</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {coordinators.map((c) => (
-                  <TableRow key={c.id}>
-                    <TableCell>{c.name}</TableCell>
-                    <TableCell>{c.email}</TableCell>
-                    <TableCell>{Array.isArray(c.phone) ? c.phone.join(", ") : c.phone}</TableCell>
-                  </TableRow>
-                ))}
+                {coordinators.map((c) => {
+                  return (
+                    <TableRow key={c.id}>
+                      <TableCell>{c.name}</TableCell>
+                      <TableCell>{c.email}</TableCell>
+                      <TableCell>{Array.isArray(c.phone) ? c.phone.join(", ") : c.phone}</TableCell>
+                      <TableCell>
+                        <button
+                          className={`px-3 py-1 rounded ${c.banned ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                          disabled={banLoading === `coordinators-${c.id}`}
+                          onClick={() => handleBanToggle('coordinators', c.id, c.banned)}
+                        >
+                          {banLoading === `coordinators-${c.id}` ? '...' : c.banned ? 'Unban' : 'Ban'}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </AccordionContent>
@@ -104,16 +136,28 @@ export default function ViewUsers() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Ban</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {admins.map((a) => (
-                  <TableRow key={a.id}>
-                    <TableCell>{a.name}</TableCell>
-                    <TableCell>{a.email}</TableCell>
-                    <TableCell>{a.role}</TableCell>
-                  </TableRow>
-                ))}
+                {admins.map((a) => {
+                  return (
+                    <TableRow key={a.id}>
+                      <TableCell>{a.name}</TableCell>
+                      <TableCell>{a.email}</TableCell>
+                      <TableCell>{a.role}</TableCell>
+                      <TableCell>
+                        <button
+                          className={`px-3 py-1 rounded ${a.banned ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                          disabled={banLoading === `admins-${a.id}`}
+                          onClick={() => handleBanToggle('admins', a.id, a.banned)}
+                        >
+                          {banLoading === `admins-${a.id}` ? '...' : a.banned ? 'Unban' : 'Ban'}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </AccordionContent>
