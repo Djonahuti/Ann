@@ -88,6 +88,14 @@ export default function AdminDrivers() {
       plate_no: d.buses?.[0]?.plate_no || null,
     }));
 
+    // ✅ sort by bus_code alphabetically, put Unassigned last
+    formatted.sort((a, b) => {
+      if (!a.bus_code && !b.bus_code) return 0;
+      if (!a.bus_code) return 1;
+      if (!b.bus_code) return -1;
+      return a.bus_code.localeCompare(b.bus_code);
+    });
+
     setDrivers(formatted);
     setLoading(false);
   };
