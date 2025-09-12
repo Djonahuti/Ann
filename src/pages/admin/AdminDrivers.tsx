@@ -9,11 +9,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card, CardHeader, CardTitle, CardContent,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
+} from "@/components/ui/form";
 
 interface Driver {
   id: number;
@@ -30,6 +36,7 @@ const driverSchema = z.object({
   email: z.string().email("Invalid email"),
   phone: z.string().optional(),
   address: z.string().optional(),
+  bus_id: z.string().optional(), // for assigning bus
 });
 
 type DriverFormValues = z.infer<typeof driverSchema>;
@@ -42,10 +49,11 @@ export default function AdminDrivers() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingDriver, setEditingDriver] = useState<Driver | null>(null);
+  const [buses, setBuses] = useState<any[]>([]);
 
   const form = useForm<DriverFormValues>({
     resolver: zodResolver(driverSchema),
-    defaultValues: { name: "", email: "", phone: "", address: "" },
+    defaultValues: { name: "", email: "", phone: "", address: "", bus_id: "" },
   });
 
   useEffect(() => {
@@ -54,6 +62,7 @@ export default function AdminDrivers() {
       return;
     }
     fetchDrivers();
+    fetchBuses();
   }, [user, role, navigate]);
 
   const fetchDrivers = async () => {
@@ -61,9 +70,7 @@ export default function AdminDrivers() {
       .from("driver")
       .select(`
         id, name, email, phone, address,
-        buses:buses!buses_driver_fkey (
-          bus_code, plate_no
-        )
+        buses:buses!buses_driver_fkey (bus_code, plate_no, id)
       `);
 
     if (error) {
@@ -85,20 +92,34 @@ export default function AdminDrivers() {
     setLoading(false);
   };
 
+  const fetchBuses = async () => {
+    const { data, error } = await supabase
+      .from("buses")
+      .select("id, bus_code, plate_no, driver");
+    if (error) {
+      console.error("Error fetching buses:", error);
+      return;
+    }
+    setBuses(data || []);
+  };
+
   const handleEdit = (driver: Driver) => {
     setEditingDriver(driver);
+    const assignedBus = buses.find((b) => b.driver === driver.id);
     form.reset({
       name: driver.name || "",
       email: driver.email || "",
       phone: driver.phone?.[0] || "",
       address: driver.address?.[0] || "",
+      bus_id: assignedBus ? String(assignedBus.id) : "",
     });
   };
 
   const onSubmit = async (values: DriverFormValues) => {
     if (!editingDriver) return;
 
-    const { error } = await supabase
+    // Update driver info
+    const { error: driverError } = await supabase
       .from("driver")
       .update({
         name: values.name,
@@ -108,13 +129,25 @@ export default function AdminDrivers() {
       })
       .eq("id", editingDriver.id);
 
-    if (error) {
-      console.error("Update error:", error);
+    if (driverError) {
+      console.error("Update driver error:", driverError);
       return;
+    }
+
+    // Clear previous bus assignment
+    await supabase.from("buses").update({ driver: null }).eq("driver", editingDriver.id);
+
+    // Assign new bus if selected
+    if (values.bus_id) {
+      await supabase
+        .from("buses")
+        .update({ driver: editingDriver.id })
+        .eq("id", values.bus_id);
     }
 
     setEditingDriver(null);
     fetchDrivers();
+    fetchBuses();
   };
 
   if (loading) return <p className="p-6">Loading drivers...</p>;
@@ -164,7 +197,10 @@ export default function AdminDrivers() {
                             <DialogTitle>Edit Driver</DialogTitle>
                           </DialogHeader>
                           <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <form
+                              onSubmit={form.handleSubmit(onSubmit)}
+                              className="space-y-4"
+                            >
                               <FormField
                                 control={form.control}
                                 name="name"
@@ -217,8 +253,36 @@ export default function AdminDrivers() {
                                   </FormItem>
                                 )}
                               />
+
+                              {/* Bus Assignment */}
+                              <FormField
+                                control={form.control}
+                                name="bus_id"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Assigned Bus</FormLabel>
+                                    <select
+                                      value={field.value || ""}
+                                      onChange={(e) => field.onChange(e.target.value)}
+                                      className="w-full border rounded p-2"
+                                    >
+                                      <option value="">Unassigned</option>
+                                      {buses.map((bus) => (
+                                        <option key={bus.id} value={bus.id}>
+                                          {bus.bus_code} ({bus.plate_no})
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </FormItem>
+                                )}
+                              />
+
                               <div className="flex justify-end gap-2">
-                                <Button type="button" variant="outline" onClick={() => setEditingDriver(null)}>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => setEditingDriver(null)}
+                                >
                                   Cancel
                                 </Button>
                                 <Button type="submit">Save</Button>
