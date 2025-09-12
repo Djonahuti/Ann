@@ -8,68 +8,83 @@ import {
   Plus,
   Edit,
   Eye,
-  Calendar,
-  DollarSign
+  Calendar
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { useSupabase } from '@/contexts/SupabaseContext'
 
 interface DashboardStats {
   totalPages: number
   publishedPages: number
   totalUsers: number
   totalRevenue: number
+  totalBuses?: number
 }
 
 export default function AdminDashboard() {
+  const { supabase } = useSupabase();
   const [stats, setStats] = useState<DashboardStats>({
     totalPages: 0,
     publishedPages: 0,
     totalUsers: 0,
-    totalRevenue: 0
+    totalRevenue: 0,
+    totalBuses: 0
   })
   const [recentPages, setRecentPages] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate loading data
-    setTimeout(() => {
+    const fetchStats = async () => {
+      setIsLoading(true);
+      // Fetch total pages and published pages
+      const { data: pages } = await supabase
+        .from('pages')
+        .select('id, is_published, updated_at, title, slug')
+        .order('updated_at', { ascending: false });
+      // Fetch total users
+      const { data: users } = await supabase
+        .from('users')
+        .select('id');
+      // Fetch total revenue (sum of payment.amount)
+      const { data: revenueData } = await supabase
+        .from('payment')
+        .select('amount');
+      // Fetch total buses
+      const { data: buses } = await supabase
+        .from('buses')
+        .select('id');
+
+      let totalRevenue = 0;
+      if (revenueData && Array.isArray(revenueData)) {
+        totalRevenue = revenueData.reduce((sum, p) => sum + (p.amount || 0), 0);
+      }
+
       setStats({
-        totalPages: 12,
-        publishedPages: 8,
-        totalUsers: 156,
-        totalRevenue: 2500000
-      })
-      setRecentPages([
-        {
-          id: '1',
-          title: 'Home Page',
-          slug: 'home',
-          status: 'published',
-          lastModified: '2024-01-15',
-          views: 1250
-        },
-        {
-          id: '2',
-          title: 'About Us',
-          slug: 'about',
-          status: 'published',
-          lastModified: '2024-01-14',
-          views: 890
-        },
-        {
-          id: '3',
-          title: 'Services',
-          slug: 'services',
-          status: 'draft',
-          lastModified: '2024-01-13',
-          views: 0
-        }
-      ])
-      setIsLoading(false)
-    }, 1000)
-  }, [])
+        totalPages: pages ? pages.length : 0,
+        publishedPages: pages ? pages.filter((p) => p.is_published).length : 0,
+        totalUsers: users ? users.length : 0,
+        totalBuses: buses ? buses.length : 0,
+        totalRevenue,
+      });
+
+      setRecentPages(
+        (pages || [])
+          .slice(0, 3)
+          .map((p) => ({
+            id: p.id,
+            title: p.title,
+            slug: p.slug,
+            status: p.is_published ? 'published' : 'draft',
+            lastModified: p.updated_at ? p.updated_at.split('T')[0] : '',
+            views: 0 // No views column in schema
+          }))
+      );
+      setIsLoading(false);
+    };
+    fetchStats();
+  }, [supabase]);
 
   if (isLoading) {
     return (
@@ -85,7 +100,7 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
         <p className="mt-2 text-gray-600">
-          Welcome to the Annhurst Global admin dashboard. Manage your website content and monitor performance.
+          Welcome to the Annhurst Transport admin dashboard. Manage your website content and monitor performance.
         </p>
       </div>
 
@@ -120,7 +135,7 @@ export default function AdminDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <span className="h-4 w-4 text-muted-foreground">₦</span>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">₦{stats.totalRevenue.toLocaleString()}</div>
@@ -136,7 +151,7 @@ export default function AdminDashboard() {
             <Bus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
+            <div className="text-2xl font-bold">{stats.totalBuses}</div>
             <p className="text-xs text-muted-foreground">
               +3 this month
             </p>
