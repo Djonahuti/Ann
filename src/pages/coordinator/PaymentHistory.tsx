@@ -50,7 +50,7 @@ export default function PaymentHistory() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user || role !== "coordinator") {
+    if (!user || (role !== "coordinator" && role !== "driver")) {
       navigate("/login");
       return;
     }

@@ -166,6 +166,13 @@ export default function DriverProfile() {
                 <div><span className="font-semibold">Bus Price:</span> {formatAsNaira(bus.initial_owe)}</div>
                 <div><span className="font-semibold">Amount Paid:</span> {formatAsNaira(bus.t_income)}</div>
                 <div><span className="font-semibold">Amount Left:</span> {calculateAmountLeft(bus.initial_owe, bus.t_income)}</div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate(`/payment/${bus.id}/history`)}
+                >
+                  View Payments
+                </Button>
               </div>
             ))
           )}
