@@ -10,7 +10,8 @@ import {
   User,
   ChevronDown,
   Bus,
-  Coins
+  Coins,
+  Contact
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
@@ -24,6 +25,7 @@ import {
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: Home },
   { name: 'Add Bus', href: '/admin/add-bus', icon: Bus },
+  { name: 'Drivers', href: '/admin/drivers', icon: Contact },
   { name: 'Payments', href: '/admin/payments', icon: Coins },
   { name: 'Pages', href: '/admin/pages', icon: FileText },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
