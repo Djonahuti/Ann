@@ -21,6 +21,7 @@ import AddBusPage from './pages/admin/AddBuses'
 import ViewPayments from './pages/admin/ViewPayments'
 import PaymentHistory from './pages/coordinator/PaymentHistory'
 import AdminDrivers from './pages/admin/AdminDrivers'
+import ViewUsers from './pages/admin/ViewUsers'
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path="/admin/add-bus" element={<ProtectedRoute><AddBusPage /></ProtectedRoute>} />
               <Route path="/admin/drivers" element={<ProtectedRoute><AdminDrivers /></ProtectedRoute>} />
               <Route path="/admin/payments" element={<ProtectedRoute><ViewPayments /></ProtectedRoute>} />
+              <Route path="/admin/users" element={<ProtectedRoute><ViewUsers /></ProtectedRoute>} />
               <Route path="pages" element={<ProtectedRoute><AdminPages /></ProtectedRoute>} />
               <Route path="/admin/pages/new" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />
               <Route path="/admin/pages/edit/:id" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />              

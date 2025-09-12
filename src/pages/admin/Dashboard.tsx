@@ -184,10 +184,12 @@ export default function AdminDashboard() {
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-4">
+              <Link to="/admin/users">
               <Button variant="outline" className="w-full h-20 flex-col">
                 <Users className="h-6 w-6 mb-2" />
                 <span>Manage Users</span>
               </Button>
+              </Link>
               <Button variant="outline" className="w-full h-20 flex-col">
                 <TrendingUp className="h-6 w-6 mb-2" />
                 <span>Analytics</span>
