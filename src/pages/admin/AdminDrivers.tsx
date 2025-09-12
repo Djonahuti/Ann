@@ -189,7 +189,13 @@ export default function AdminDrivers() {
     setDrivers(sortDrivers(drivers, key));
   };
 
-  if (loading) return <p className="p-6">Loading drivers...</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
   const visibleDrivers = drivers.filter((d) =>
     filterCoordinator === "all" ? true : d.coordinator_id === Number(filterCoordinator)
