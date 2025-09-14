@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { supabase } from '@/lib/supabase'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -12,14 +13,35 @@ const navigation = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const location = useLocation()
+  const location = useLocation();
+  const [settings, setSettings] = useState<any>(null);  
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase.from("settings").select("*").single();
+      if (!error) setSettings(data);
+    };
+    fetchSettings();
+  }, []);
+
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  const logoUrl = settings.logo
+    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+    : "/logo/logo.png"; // fallback
 
   return (
     <header className="bg-white shadow-sm border-b">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
-            <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+            <img src={logoUrl} alt="Annhurst Transport" className="h-10 w-auto" />
           </Link>
         </div>
         <div className="flex lg:hidden">
