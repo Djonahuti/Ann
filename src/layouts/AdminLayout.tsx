@@ -22,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { supabase } from '@/lib/supabase'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: Home },
@@ -38,6 +39,7 @@ export default function AdminLayout() {
   const { user, role, signOut } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
+  const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
     if (!user || role !== 'admin') {
@@ -50,6 +52,26 @@ export default function AdminLayout() {
     navigate('/login') // or '/admin/login'
   }
 
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase.from("settings").select("*").single();
+      if (!error) setSettings(data);
+    };
+    fetchSettings();
+  }, []);
+  
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  const logoUrl = settings.logo
+    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+    : "/logo/logo.png"; // fallback
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
@@ -59,7 +81,7 @@ export default function AdminLayout() {
           <div className="flex h-16 items-center justify-between px-6 border-b">
             <div className="flex items-center space-x-2">
               <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
-                <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+                <img src={logoUrl} alt="Annhurst Transport" className="h-10 w-auto" />
               </Link>
             </div>
             <button
@@ -101,7 +123,7 @@ export default function AdminLayout() {
           <div className="flex h-16 items-center">
             <div className="flex items-center space-x-2">
               <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
-                <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+                <img src={logoUrl} alt="Annhurst Transport" className="h-10 w-auto" />
               </Link>
             </div>
           </div>
