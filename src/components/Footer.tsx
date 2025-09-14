@@ -113,13 +113,13 @@ export default function Footer() {
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               {settings.bottom_right?.map((link: string, i: number) => (
-                <a
+                <Link
                   key={i}
-                  href="#"
+                  to="/terms"
                   className="text-gray-300 hover:text-white text-sm transition-colors"
                 >
                   {link}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
