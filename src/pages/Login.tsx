@@ -145,7 +145,7 @@ export default function LoginPage() {
 
       <div className="mt-6 text-center">
         <p className="text-xs text-gray-500">
-          © 2024 Annhurst Transport Service Limited. All rights reserved.
+          © {new Date().getFullYear()} {settings.bottom_left || "Company"}
         </p>
       </div>        
       </Card>
