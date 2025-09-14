@@ -1,7 +1,32 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Footer() {
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase.from("settings").select("*").single();
+      if (!error) setSettings(data);
+    };
+    fetchSettings();
+  }, []);
+
+  if (!settings) {
+    return (
+      <footer className="bg-gray-900 text-white playfair-display p-8 text-center">
+        <p>Loading footer...</p>
+      </footer>
+    );
+  }
+
+  const logoUrl = settings.logo
+    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+    : "/logo/logo.png"; // fallback
+
+
   return (
     <footer className="bg-gray-900 text-white playfair-display">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -10,32 +35,40 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-25 h-25 rounded-lg flex items-center justify-center">
-                <img src="/logo/logo.png" alt="Annhurst Transport" className="h-20 w-auto" />
+                <img src={logoUrl} alt="Annhurst Transport" className="h-20 w-auto" />
               </div>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
-              Your trusted partner in bus higher purchase solutions. We provide comprehensive 
-              financing options for transportation businesses across the globe.
+              {settings.footer_write ||
+                "Your trusted partner in bus higher purchase solutions."}
             </p>
             <div className="space-y-2 text-sm text-gray-300">
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span>+234 809 318 3556</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="w-4 h-4" />
-                <span>customerservices@annhurst-gsl.com</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span>Lagos, Nigeria</span>
-              </div>
+              {settings.phone?.map((ph: string, i: number) => (
+                <div key={i} className="flex items-center space-x-2">
+                  <Phone className="w-4 h-4" />
+                  <span>{ph}</span>
+                </div>
+              ))}
+              {settings.email?.map((em: string, i: number) => (
+                <div key={i} className="flex items-center space-x-2">
+                  <Mail className="w-4 h-4" />
+                  <span>{em}</span>
+                </div>
+              ))}
+              {settings.address && (
+                <div className="flex items-center space-x-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>{settings.address}</span>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {settings.footer_head || "Quick Links"}
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-gray-300 hover:text-white transition-colors">
@@ -62,13 +95,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Our Services</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {settings.footer_head2 || "Services"}
+            </h3>
             <ul className="space-y-2 text-gray-300">
-              <li>Bus Financing</li>
-              <li>Higher Purchase</li>
-              <li>Lease Options</li>
-              <li>Fleet Management</li>
-              <li>Insurance Solutions</li>
+              {settings.services?.map((srv: string, i: number) => (
+                <li key={i}>{srv}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -76,15 +109,18 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-300 text-sm">
-              © 2024 Annhurst Transport Service Limited. All rights reserved.
+              © {new Date().getFullYear()} {settings.bottom_left || "Company"}
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link to="/privacy" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Privacy Policy
-              </Link>
-              <Link to="/terms" className="text-gray-300 hover:text-white text-sm transition-colors">
-                Terms of Service
-              </Link>
+              {settings.bottom_right?.map((link: string, i: number) => (
+                <a
+                  key={i}
+                  href="#"
+                  className="text-gray-300 hover:text-white text-sm transition-colors"
+                >
+                  {link}
+                </a>
+              ))}
             </div>
           </div>
         </div>
