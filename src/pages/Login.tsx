@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
+import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const { signIn } = useAuth()
@@ -15,6 +16,15 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [settings, setSettings] = useState<any>(null); 
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase.from("settings").select("*").single();
+      if (!error) setSettings(data);
+    };
+    fetchSettings();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,6 +70,18 @@ export default function LoginPage() {
     }
   }
 
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  const logoUrl = settings.logo
+    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+    : "/logo/logo.png"; // fallback
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md space-y-8 p-4">
@@ -67,7 +89,7 @@ export default function LoginPage() {
         <div className="text-center mb-3">
           <div className="mx-auto h-16 w-16 rounded-lg flex items-center justify-center">
             <Link to="/">
-             <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
+             <img src={logoUrl} alt="Annhurst Transport" className="h-10 w-auto" />
             </Link>
           </div>
           <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
