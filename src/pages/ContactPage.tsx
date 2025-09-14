@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -137,18 +138,45 @@ export default function ContactPage() {
 
                 <div>
                   <Label htmlFor="service">Service of Interest</Label>
-                  <select
-                    id="service"
-                    name="service"
+                  <Select
                     value={formData.service}
-                    onChange={handleChange}
-                    className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-primary focus:outline-none focus:ring-primary"
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, service: value }))
+                    }
                   >
-                    <option value="higher-purchase">Bus Higher Purchase</option>
-                    <option value="fleet-management">Fleet Management</option>
-                    <option value="consulting">Business Consulting</option>
-                    <option value="other">Other Services</option>
-                  </select>
+                    <SelectTrigger className="mt-2 w-full">
+                      <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Services</SelectLabel>
+                        <SelectItem
+                          value="higher-purchase"
+                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                        >
+                          Bus Higher Purchase
+                        </SelectItem>
+                        <SelectItem
+                          value="fleet-management"
+                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                        >
+                          Fleet Management
+                        </SelectItem>
+                        <SelectItem
+                          value="consulting"
+                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                        >
+                          Business Consulting
+                        </SelectItem>
+                        <SelectItem
+                          value="other"
+                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                        >
+                          Other Services
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
