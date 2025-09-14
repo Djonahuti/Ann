@@ -22,8 +22,8 @@ export default function Footer() {
     );
   }
 
-  const logoUrl = settings.logo
-    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+  const logoUrl = settings.logo_blk
+    ? supabase.storage.from("receipts").getPublicUrl(settings.logo_blk).data.publicUrl
     : "/logo/logo.png"; // fallback
 
 
