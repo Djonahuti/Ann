@@ -93,7 +93,7 @@ export default function AddBusPage() {
   }
 
   return (
-    <Card className="max-w-3xl mx-auto">
+    <Card className="max-w-3xl mx-auto bg-white dark:bg-gray-900">
       <CardHeader>
         <CardTitle>Add New Bus</CardTitle>
       </CardHeader>
@@ -109,35 +109,41 @@ export default function AddBusPage() {
           </div>
           <div>
             <Label>Assign Driver</Label>
-            <select
-              className="w-full border rounded p-2"
-              value={driverId}
-              onChange={(e) => setDriverId(e.target.value)}
-              required
-            >
-              <option value="">Select driver</option>
-              {drivers.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name} ({d.email})
-                </option>
-              ))}
-            </select>
+            <Select value={driverId} onValueChange={setDriverId}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select driver" />
+              </SelectTrigger>
+              <SelectContent>
+                {drivers.map((d) => (
+                  <SelectItem
+                    key={d.id}
+                    value={d.id}
+                    className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                  >
+                    {d.name} ({d.email})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div>
             <Label>Assign Coordinator</Label>
-            <select
-              className="w-full border rounded p-2"
-              value={coordinatorId}
-              onChange={(e) => setCoordinatorId(e.target.value)}
-              required
-            >
-              <option value="">Select coordinator</option>
-              {coordinators.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.email})
-                </option>
-              ))}
-            </select>
+            <Select value={coordinatorId} onValueChange={setCoordinatorId}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select coordinator" />
+              </SelectTrigger>
+              <SelectContent>
+                {coordinators.map((c) => (
+                  <SelectItem
+                    key={c.id}
+                    value={c.id}
+                    className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                  >
+                    {c.name} ({c.email})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
@@ -147,8 +153,18 @@ export default function AddBusPage() {
                 <SelectValue placeholder="Select option" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="true">Yes</SelectItem>
-                <SelectItem value="false">No</SelectItem>
+                <SelectItem
+                 value="true"
+                 className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                >
+                  Yes
+                </SelectItem>
+                <SelectItem
+                 value="false"
+                 className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                >
+                  No
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -190,7 +206,7 @@ export default function AddBusPage() {
             <Input type="number" value={tIncome} onChange={(e) => setTIncome(e.target.value)} />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full text-gray-200" disabled={loading}>
             {loading ? 'Adding...' : 'Add Bus'}
           </Button>
         </form>
