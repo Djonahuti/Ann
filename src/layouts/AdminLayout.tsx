@@ -133,6 +133,7 @@ export default function AdminLayout() {
                   </li>
                 )
               })}
+              <li className='mt-auto'><ThemeToggle/></li>              
             </ul>
           </nav>
         </div>
