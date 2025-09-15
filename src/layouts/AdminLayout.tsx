@@ -123,7 +123,7 @@ export default function AdminLayout() {
                       className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                         isActive
                           ? 'bg-red-50 text-primary border border-primary'
-                          : 'text-gray-700 dark:text-gray-200 hover:bg-primary hover:text-white transition-colors'
+                              : 'text-gray-700 dark:text-gray-200 hover:bg-primary hover:text-white transition-colors'
                       }`}
                       onClick={() => setSidebarOpen(false)}
                     >
