@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
+import { useEffect as useThemeEffect } from 'react';
 
 export default function LoginPage() {
   const { signIn } = useAuth()
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [settings, setSettings] = useState<any>(null); 
 
   useEffect(() => {
@@ -24,6 +26,21 @@ export default function LoginPage() {
       if (!error) setSettings(data);
     };
     fetchSettings();
+  }, []);
+
+  // Listen for theme changes
+  useThemeEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateTheme = () => setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    updateTheme();
+    mq.addEventListener('change', updateTheme);
+    // Listen for class changes (ThemeToggle likely toggles 'dark' class)
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => {
+      mq.removeEventListener('change', updateTheme);
+      observer.disconnect();
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,12 +95,15 @@ export default function LoginPage() {
     );
   }
 
-  const logoUrl = settings.logo
-    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+  // Choose logo based on theme
+  const logoKey = theme === 'dark' ? 'logo_blk' : 'logo';
+  const logoPath = settings[logoKey] || settings.logo || 'logo.png';
+  const logoUrl = logoPath
+    ? supabase.storage.from("receipts").getPublicUrl(logoPath).data.publicUrl
     : "/logo/logo.png"; // fallback
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 bg-gradient-to-r dark:from-gray-400 dark:to-red-300">
       <Card className="w-full max-w-md space-y-8 p-4">
         <CardContent>
         <div className="text-center mb-3">
@@ -92,10 +112,10 @@ export default function LoginPage() {
              <img src={logoUrl} alt="Annhurst Transport" className="h-10 w-auto" />
             </Link>
           </div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300">
             Login
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Welcome Back
           </p>
         </div>
@@ -129,13 +149,13 @@ export default function LoginPage() {
                 )}
               </button>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full text-gray-200" disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             You Have a Bus, but don't have Login Credentials?{' '}
             <Link to="/contact" className="text-primary hover:underline">
               Contact your coordinator

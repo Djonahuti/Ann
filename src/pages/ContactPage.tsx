@@ -47,15 +47,15 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-white playfair-display">
+    <div className="playfair-display">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-gray-100 to-red-200">
+      <div className="relative bg-gradient-to-r from-gray-100 to-red-200 dark:from-gray-400 dark:to-red-300">
         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Contact <span className='text-primary'>Us</span>
+              Contact <span className='text-primary dark:text-primary-light'>Us</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-800 max-w-3xl mx-auto">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-700 max-w-3xl mx-auto">
               Ready to expand your bus fleet? Get in touch with our team today and 
               discover how we can help you grow your transportation business.
             </p>
@@ -65,7 +65,7 @@ export default function ContactPage() {
               <Button
                 variant="ghost"
                 size="lg"
-                className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 hover:border-none transform transition duration-300 ease-in-out hover:scale-105"
+                className="border-2 flex-1 border-primary dark:border-primary-light text-primary dark:text-primary-light hover:bg-primary-dark dark:hover:bg-primary-light hover:text-gray-200 dark:hover:text-gray-100 transform transition duration-300 ease-in-out hover:scale-105"
               >
                 I have a bus
               </Button>
@@ -80,7 +80,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-8">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 mb-8">
                 Send us a message
               </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -196,7 +196,7 @@ export default function ContactPage() {
                 <Button 
                   type="submit" 
                   size="lg" 
-                  className="w-full hover:bg-primary-dark"
+                  className="w-full hover:bg-primary-dark text-gray-1 dark:text-gray-40000"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
@@ -206,7 +206,7 @@ export default function ContactPage() {
 
             {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-8">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 mb-8">
                 Get in touch
               </h2>
               <div className="space-y-8">
@@ -215,13 +215,13 @@ export default function ContactPage() {
                     <Phone className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Phone</h3>
-                    <p className="mt-2 text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Phone</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
                       <a href="tel:+2341234567890" className="hover:text-primary">
                         +234 809 318 3556
                       </a>
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                       <a href="tel:+2349876543210" className="hover:text-primary">
                         +234 816 746 2350
                       </a>
@@ -234,13 +234,13 @@ export default function ContactPage() {
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                    <p className="mt-2 text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Email</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
                       <a href="mailto:info@annhurstglobal.com" className="hover:text-primary">
                         customerservices@annhurst-gsl.com
                       </a>
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                       <a href="mailto:sales@annhurstglobal.com" className="hover:text-primary">
                         Info@annhurst-gsl.com
                       </a>
@@ -253,8 +253,8 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Office Address</h3>
-                    <p className="mt-2 text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Office Address</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
                       13B Obafemi Anibaba<br />
                       Admiralty Way Lekki<br />
                       Lagos, Nigeria
@@ -267,8 +267,8 @@ export default function ContactPage() {
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Business Hours</h3>
-                    <p className="mt-2 text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300">Business Hours</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
                       Monday - Friday: 8:00 AM - 6:00 PM<br />
                       Saturday: 9:00 AM - 2:00 PM<br />
                       Sunday: Closed
@@ -278,11 +278,11 @@ export default function ContactPage() {
               </div>
 
               {/* Quick Contact */}
-              <div className="mt-12 p-6 bg-gray-50 rounded-2xl">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="mt-12 p-6 bg-gray-50 dark:bg-gray-300/5 rounded-2xl">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
                   Need immediate assistance?
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Our customer support team is available to help you with urgent inquiries 
                   and quick questions about our services.
                 </p>
@@ -303,14 +303,14 @@ export default function ContactPage() {
       </div>
 
       {/* Map Section */}
-      <div className="bg-gray-50 py-24 sm:py-32">
+      <div className="bg-gray-50 dark:bg-gray-900 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-base font-semibold leading-7 text-primary">Find Us</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-base font-semibold leading-7 text-primary dark:text-primary-light">Find Us</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl">
               Visit our office
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Located in the heart of Lagos business district, our office is easily 
               accessible and ready to welcome you.
             </p>
@@ -336,8 +336,8 @@ export default function ContactPage() {
       <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-base font-semibold leading-7 text-primary">FAQ</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-base font-semibold leading-7 text-primary dark:text-primary-light">FAQ</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl">
               Frequently asked questions
             </p>
           </div>
@@ -345,10 +345,10 @@ export default function ContactPage() {
           <div className="mx-auto max-w-4xl">
             <div className="space-y-8">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">
                   What documents do I need to apply for bus financing?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   You'll need your business registration documents, financial statements, 
                   driver's license, and proof of income. Our team will provide a complete 
                   checklist during your initial consultation.
@@ -356,10 +356,10 @@ export default function ContactPage() {
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">
                   How long does the approval process take?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   Typically, we can provide approval within 2-3 business days for complete 
                   applications. The entire process from application to funding usually takes 
                   1-2 weeks.
@@ -367,20 +367,20 @@ export default function ContactPage() {
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">
                   What types of buses do you finance?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   We finance all types of buses including minibuses, coaches, school buses, 
                   and luxury buses. We work with both new and used vehicles from reputable manufacturers.
                 </p>
               </div>
               
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3">
                   Do you offer refinancing options?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   Yes, we offer refinancing solutions for existing bus loans. This can help 
                   you get better rates or more favorable terms. Contact us to discuss your options.
                 </p>

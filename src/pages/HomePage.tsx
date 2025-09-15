@@ -110,41 +110,41 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
             <h2 className="text-base font-semibold leading-7 text-primary-light">{page.body_sub_heading}</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl">
               {page.body_heading}
             </p>
-            <p className="mt-6 text-lg leading-8 text-gray-600">{page.body_first_text}</p>
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">{page.body_first_text}</p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <Shield className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 dark:text-gray-300">
+                  <Shield className="h-5 w-5 flex-none text-primary dark:text-primary-light" aria-hidden="true" />
                   {page.box_head}
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-400">
                   <p className="flex-auto">
                     {page.box_text}
                   </p>
                 </dd>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <Clock className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 dark:text-gray-300">
+                  <Clock className="h-5 w-5 flex-none text-primary dark:text-primary-light" aria-hidden="true" />
                   {page.box_head2}
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-400">
                   <p className="flex-auto">
                     {page.box_text2}
                   </p>
                 </dd>
               </div>
               <div className="flex flex-col transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:rounded-lg hover:p-4">
-                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                  <Users className="h-5 w-5 flex-none text-primary" aria-hidden="true" />
+                <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 dark:text-gray-300">
+                  <Users className="h-5 w-5 flex-none text-primary dark:text-primary-light" aria-hidden="true" />
                   {page.box_head3}
                 </dt>
-                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-400">
                   <p className="flex-auto">
                     {page.box_text3}
                   </p>
@@ -156,44 +156,44 @@ export default function HomePage() {
       </div>
 
       {/* Services Overview */}
-      <div className="bg-gray-50 py-24 sm:py-32">
+      <div className="bg-gray-50 dark:bg-gray-900 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-primary">{page.body_sub_heading2}</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-base font-semibold leading-7 text-primary dark:text-primary-light">{page.body_sub_heading2}</h2>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl">
               {page.body_heading2}
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
                 <div className="flex items-center gap-x-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary dark:bg-primary-light">
                     <Bus className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head4}</h3>
+                  <h3 className="text-lg font-semibold leading-7 text-gray-900 dark:text-gray-300">{page.box_head4}</h3>
                 </div>
-                <p className="mt-4 text-base leading-7 text-gray-600">
+                <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">
                   {page.box_text4}
                 </p>
                 <div className="mt-6">
-                  <Link to="/services" className="text-primary hover:text-primary-dark font-medium">
+                  <Link to="/services" className="text-primary dark:text-primary-light hover:text-primary-dark font-medium">
                     {page.section_secondary_btn} →
                   </Link>
                 </div>
               </div>
-              <div className="bg-white rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm ring-1 ring-gray-900/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-primary">
                 <div className="flex items-center gap-x-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary dark:bg-primary-light">
                     <TrendingUp className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold leading-7 text-gray-900">{page.box_head5}</h3>
+                  <h3 className="text-lg font-semibold leading-7 text-gray-900 dark:text-gray-300">{page.box_head5}</h3>
                 </div>
-                <p className="mt-4 text-base leading-7 text-gray-600">
+                <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">
                   {page.box_text5}
                 </p>
                 <div className="mt-6">
-                  <Link to="/services" className="text-primary hover:text-primary-dark font-medium">
+                  <Link to="/services" className="text-primary dark:text-primary-light hover:text-primary-dark font-medium">
                     {page.section_secondary_btn} →
                   </Link>
                 </div>
@@ -204,33 +204,33 @@ export default function HomePage() {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-white py-24 sm:py-32">
+      <div className="py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:max-w-none">
             <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 sm:text-4xl">
                 {page.body_heading3}
               </h2>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
+              <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
                 {page.body_sub_heading3}
               </p>
             </div>
             <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text6}</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head6}</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400">{page.box_text6}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary dark:text-primary-light">{page.box_head6}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text7}</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head7}</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400">{page.box_text7}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary dark:text-primary-light">{page.box_head7}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text8}</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head8}</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400">{page.box_text8}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary dark:text-primary-light">{page.box_head8}</dd>
               </div>
               <div className="flex flex-col bg-gray-400/5 p-8 transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:rounded-lg">
-                <dt className="text-sm font-semibold leading-6 text-gray-600">{page.box_text9}</dt>
-                <dd className="order-first text-3xl font-bold tracking-tight text-primary">{page.box_head9}</dd>
+                <dt className="text-sm font-semibold leading-6 text-gray-600 dark:text-gray-400">{page.box_text9}</dt>
+                <dd className="order-first text-3xl font-bold tracking-tight text-primary dark:text-primary-light">{page.box_head9}</dd>
               </div>
             </dl>
           </div>

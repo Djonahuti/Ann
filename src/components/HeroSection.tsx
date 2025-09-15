@@ -100,18 +100,18 @@ export default function HeroSection() {
   }
 
   return (
-<section className="relative bg-gradient-to-r from-gray-100 to-red-200 py-20">
+<section className="relative bg-gradient-to-r from-gray-100 to-red-200 dark:from-gray-400 dark:to-red-300 py-20">
   <div className="container mx-auto px-6 lg:px-12">
     <div className="flex flex-col lg:flex-row items-start justify-between gap-12">
       {/* Text Content */}
       <div className="max-w-2xl flex-1">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight text-gray-900">
           {page.hero_big_black}{" "}
-          <span className="text-primary underline decoration-primary">
+          <span className="text-primary underline decoration-primary dark:text-primary-light dark:decoration-primary-light">
             {page.hero_big_primary}
           </span>
         </h1>
-        <p className="mt-6 text-lg text-gray-600">
+        <p className="mt-6 text-lg text-gray-600 dark:text-gray-700">
           {page.hero_text}
         </p>
       <div className="flex flex-col sm:flex-row gap-4 mb-3 mt-8">
@@ -121,7 +121,7 @@ export default function HeroSection() {
           </Button>
         </Link>
         <Link to="/contact">
-          <Button variant="ghost" size="lg" className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 dark:border-primary-light dark:text-primary-light dark:hover:bg-primary-light hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
+          <Button variant="ghost" size="lg" className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 dark:hover:text-gray-200 dark:border-primary-light dark:text-primary-light dark:hover:bg-primary-light hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
             {page.hero_secondary_button}
           </Button>
         </Link>
@@ -134,11 +134,11 @@ export default function HeroSection() {
         <Card className="w-64 shadow-md">
           <CardContent className="p-6">
             <div className="flex items-center gap-2 mb-2">
-              <Star className="w-5 h-5 text-primary" />
+              <Star className="w-5 h-5 text-primary dark:text-primary-light" />
               <h3 className="font-semibold">{page.text}</h3>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-primary font-semibold">{page.body_second_text}</span>
+              <span className="text-primary dark:text-primary-light font-semibold">{page.body_second_text}</span>
               <span className="text-gray-500 dark:text-gray-200">{page.team_img}</span>
             </div>
             <Progress value={80} className="mt-3" />
@@ -149,9 +149,9 @@ export default function HeroSection() {
         <Card className="w-64 shadow-md">
           <CardContent className="p-6 text-center">
             <div className="flex flex-col items-center gap-2">
-              <Smile className="w-6 h-6 text-primary" />
+              <Smile className="w-6 h-6 text-primary dark:text-primary-light" />
               <h3 className="font-semibold">{page.team_text}</h3>
-              <p className="text-3xl font-bold text-primary">{page.team_role}</p>
+              <p className="text-3xl font-bold text-primary dark:text-primary-light">{page.team_role}</p>
             </div>
           </CardContent>
         </Card>
@@ -159,7 +159,7 @@ export default function HeroSection() {
     </div>
 
     {/* Metrics Row */}
-    <div className="mt-14 flex gap-12 text-primary font-bold text-2xl">
+    <div className="mt-14 flex gap-12 text-primary dark:text-primary-light font-bold text-2xl">
       <div className="text-center">{page.hero_year}<br />
           <span className="text-gray-600 underline decoration-primary text-xs">
             {page.hero_year_span}

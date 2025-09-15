@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
+import ThemeToggle from './ThemeToggle'
+import { useEffect as useThemeEffect } from 'react';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -14,7 +16,8 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation();
-  const [settings, setSettings] = useState<any>(null);  
+  const [settings, setSettings] = useState<any>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -22,6 +25,21 @@ export default function Header() {
       if (!error) setSettings(data);
     };
     fetchSettings();
+  }, []);
+
+  // Listen for theme changes
+  useThemeEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateTheme = () => setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    updateTheme();
+    mq.addEventListener('change', updateTheme);
+    // Listen for class changes (ThemeToggle likely toggles 'dark' class)
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => {
+      mq.removeEventListener('change', updateTheme);
+      observer.disconnect();
+    };
   }, []);
 
   if (!settings) {
@@ -32,12 +50,15 @@ export default function Header() {
     );
   }
 
-  const logoUrl = settings.logo
-    ? supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl
+  // Choose logo based on theme
+  const logoKey = theme === 'dark' ? 'logo_blk' : 'logo';
+  const logoPath = settings[logoKey] || settings.logo || 'logo.png';
+  const logoUrl = logoPath
+    ? supabase.storage.from("receipts").getPublicUrl(logoPath).data.publicUrl
     : "/logo/logo.png"; // fallback
 
   return (
-    <header className="bg-white shadow-sm border-b">
+    <header className="shadow-sm border-b">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
@@ -47,7 +68,7 @@ export default function Header() {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-300"
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
@@ -61,8 +82,8 @@ export default function Header() {
               to={item.href}
               className={`text-sm font-semibold leading-6 ${
                 location.pathname === item.href
-                  ? 'text-primary'
-                  : 'text-gray-900 hover:text-primary transition-colors'
+                  ? 'text-primary dark:text-primary-light'
+                  : 'text-gray-900 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light transition-colors'
               }`}
             >
               {item.name}
@@ -71,10 +92,11 @@ export default function Header() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <Link to="/contact">
-            <Button variant="ghost" size="sm" className="border-2 flex-1 border-primary text-primary hover:bg-primary-dark hover:text-gray-200">
+            <Button variant="ghost" size="sm" className="border-2 flex-1 border-primary dark:border-primary-light text-primary dark:text-primary-light hover:bg-primary-dark dark:hover:bg-primary-light hover:text-gray-200 dark:hover:text-gray-100">
               Get Started
             </Button>
           </Link>
+          <span className='ml-5'><ThemeToggle /></span>
         </div>
       </nav>
       
@@ -89,7 +111,7 @@ export default function Header() {
               </Link>
               <button
                 type="button"
-                className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <span className="sr-only">Close menu</span>
@@ -105,7 +127,7 @@ export default function Header() {
                       to={item.href}
                       className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
                         location.pathname === item.href
-                          ? 'text-primary bg-gray-50'
+                          ? 'text-primary dark:text-primary-light bg-gray-50'
                           : 'text-gray-900 hover:bg-gray-50'
                       }`}
                       onClick={() => setMobileMenuOpen(false)}

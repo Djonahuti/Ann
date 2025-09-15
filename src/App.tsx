@@ -24,9 +24,11 @@ import AdminDrivers from './pages/admin/AdminDrivers'
 import ViewUsers from './pages/admin/ViewUsers'
 import Settings from './pages/admin/Settings'
 import SettingsEdit from './pages/admin/SettingsEdit'
+import { ThemeProvider } from './components/ThemeProvider'
 
 function App() {
   return (
+    <ThemeProvider>
     <SupabaseProvider>
       <AuthProvider>
         <div className="min-h-screen bg-background">
@@ -63,6 +65,7 @@ function App() {
         </div>
       </AuthProvider>
     </SupabaseProvider>
+    </ThemeProvider>
   )
 }
 
