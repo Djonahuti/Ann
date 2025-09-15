@@ -98,15 +98,15 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300">Dashboard</h1>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">
           Welcome to the Annhurst Transport admin dashboard. Manage your website content and monitor performance.
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Pages</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Revenue</CardTitle>
             <span className="h-4 w-4 text-muted-foreground">₦</span>
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Buses</CardTitle>
             <Bus className="h-4 w-4 text-muted-foreground" />
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>
@@ -198,7 +198,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
             <CardDescription>
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Pages */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-800">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
               <div key={page.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <FileText className="h-5 w-5 text-gray-600" />
+                    <FileText className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                   </div>
                   <div>
                     <h3 className="font-medium">{page.title}</h3>
@@ -265,7 +265,10 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Badge variant={page.status === 'published' ? 'default' : 'secondary'}>
+                  <Badge
+                   variant={page.status === 'published' ? 'default' : 'secondary'}
+                   className='text-gray-200'
+                  >
                     {page.status}
                   </Badge>
                   <div className="text-right">
