@@ -121,7 +121,7 @@ export default function HeroSection() {
           </Button>
         </Link>
         <Link to="/contact">
-          <Button variant="ghost" size="lg" className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
+          <Button variant="ghost" size="lg" className="border-2 border-primary text-primary hover:bg-primary-dark hover:text-gray-200 dark:border-primary-light dark:text-primary-light dark:hover:bg-primary-light hover:border-none transform transition duration-300 ease-in-out hover:scale-105">
             {page.hero_secondary_button}
           </Button>
         </Link>
@@ -139,7 +139,7 @@ export default function HeroSection() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-primary font-semibold">{page.body_second_text}</span>
-              <span className="text-gray-500">{page.team_img}</span>
+              <span className="text-gray-500 dark:text-gray-200">{page.team_img}</span>
             </div>
             <Progress value={80} className="mt-3" />
           </CardContent>
@@ -149,7 +149,7 @@ export default function HeroSection() {
         <Card className="w-64 shadow-md">
           <CardContent className="p-6 text-center">
             <div className="flex flex-col items-center gap-2">
-              <Smile className="w-6 h-6 text-gray-800" />
+              <Smile className="w-6 h-6 text-primary" />
               <h3 className="font-semibold">{page.team_text}</h3>
               <p className="text-3xl font-bold text-primary">{page.team_role}</p>
             </div>
