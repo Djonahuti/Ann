@@ -104,7 +104,7 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden">
           <div className="fixed inset-0 z-50" />
-          <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
                 <img src="/logo/ann.png" alt="Annhurst Transport" className="h-10 w-auto" />
@@ -128,13 +128,14 @@ export default function Header() {
                       className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
                         location.pathname === item.href
                           ? 'text-primary dark:text-primary-light bg-gray-50'
-                          : 'text-gray-900 hover:bg-gray-50'
+                          : 'text-gray-900 dark:text-gray-300 hover:bg-gray-50'
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.name}
                     </Link>
                   ))}
+                  <div className='mt-auto'><ThemeToggle /></div>
                 </div>
               </div>
             </div>
