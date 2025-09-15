@@ -98,7 +98,7 @@ export default function AdminLayout() {
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-900/80" onClick={() => setSidebarOpen(false)} />
-        <div className="fixed inset-y-0 left-0 z-50 w-64">
+        <div className="fixed inset-y-0 left-0 z-50 w-64 sm:ring-1 sm:ring-gray-900/10 border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/90">
           <div className="flex h-16 items-center justify-between px-6 border-b">
             <div className="flex items-center space-x-2">
               <Link to="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
