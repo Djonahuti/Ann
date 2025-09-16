@@ -32,21 +32,21 @@ export default function Settings() {
   }
 
   return (
-    <Card>
+    <Card className='bg-gray-50 bg-gradient-to-r dark:from-gray-400 dark:to-red-300'>
         <CardHeader className="flex justify-between items-center">
-            <CardTitle>Settings</CardTitle>
+            <CardTitle className='text-gray-900'>Settings</CardTitle>
         </CardHeader>
         <CardContent>
           {settings.logo && (
             <div className='mb-4'>
               <div className="flex justify-between items-center space-x-2">
-                <p className="font-medium text-lg">Main Logo:</p>
+                <p className="font-medium text-lg text-gray-900">Main Logo:</p>
                 <img src={supabase.storage.from("receipts").getPublicUrl(settings.logo).data.publicUrl} alt="Logo" className="h-16" />
               </div>
             </div>
           )}   
 
-          <div className='flex items-center p-4 text-lg'>Footer Section</div>  
+          <div className='flex items-center p-4 text-lg text-gray-900'>Footer Section</div>  
 
             <footer className="bg-gray-900 text-white playfair-display p-4">
               <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -127,7 +127,12 @@ export default function Settings() {
         </CardContent>
 
         <CardFooter>
-            <Button onClick={() => navigate("/admin/settings/edit/1")}>Edit Settings</Button>
+            <Button
+             onClick={() => navigate("/admin/settings/edit/1")}
+             className="bg-primary text-gray-200 hover:bg-primary-dark hover:text-gray-100 dark:hover:bg-primary-light"
+            >
+              Edit Settings
+            </Button>
         </CardFooter>
     </Card>
 
