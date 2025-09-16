@@ -20,6 +20,8 @@ import { Input } from "@/components/ui/input";
 import {
   Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
 } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface Driver {
   id: number;
@@ -203,7 +205,7 @@ export default function AdminDrivers() {
 
   return (
     <div className="max-w-6xl mx-auto py-10">
-      <Card>
+      <Card className="bg-white dark:bg-gray-900">
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Drivers & Assigned Buses</CardTitle>
           <div className="flex gap-4 items-center">
@@ -212,6 +214,7 @@ export default function AdminDrivers() {
                 size="sm"
                 variant={sortBy === "bus" ? "default" : "outline"}
                 onClick={() => handleSortChange("bus")}
+                className="text-gray-200"
               >
                 Sort by Bus
               </Button>
@@ -223,20 +226,28 @@ export default function AdminDrivers() {
                 Sort by Driver
               </Button>
             </div>
-            <div>
-              <label className="mr-2 font-medium">Filter by Coordinator:</label>
-              <select
+            <div className="flex items-center space-x-2">
+              <Label className="mr-2 font-medium">Filter by Coordinator:</Label>
+              <Select
                 value={filterCoordinator}
-                onChange={(e) => setFilterCoordinator(e.target.value)}
-                className="border rounded p-2"
+                onValueChange={(value) => setFilterCoordinator(value)}
               >
-                <option value="all">All</option>
+                <SelectTrigger className="w-30">
+                  <SelectValue placeholder="Select coordinator" />
+                </SelectTrigger>
+                <SelectContent className="border rounded p-2">
+                <SelectItem value="all">All</SelectItem>
                 {coordinators.map((c) => (
-                  <option key={c.id} value={c.id}>
+                  <SelectItem
+                   key={c.id} 
+                   value={c.id}
+                  className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                  >
                     {c.name}
-                  </option>
+                  </SelectItem>
                 ))}
-              </select>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardHeader>
