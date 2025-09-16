@@ -129,7 +129,7 @@ export default function SettingsEdit() {
             <img
               src={supabase.storage.from(BUCKET).getPublicUrl(formData.logo).data.publicUrl}
               alt="Logo"
-              className="h-16 mt-2"
+              className="h-16 mt-2 bg-gray-50 bg-gradient-to-r dark:from-gray-400 dark:to-red-300"
             />
           )}
         </div>
@@ -146,7 +146,7 @@ export default function SettingsEdit() {
             <img
               src={supabase.storage.from(BUCKET).getPublicUrl(formData.logo_blk).data.publicUrl}
               alt="Logo Black"
-              className="h-16 mt-2"
+              className="h-16 mt-2 bg-gray-900/80"
             />
           )}
         </div>
@@ -156,7 +156,7 @@ export default function SettingsEdit() {
         <Button variant="outline" onClick={() => navigate("/admin/settings")}>
           Cancel
         </Button>
-        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={handleSave} className="text-gray-200">Save</Button>
       </div>
     </div>
   );
