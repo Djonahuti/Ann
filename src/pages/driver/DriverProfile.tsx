@@ -182,15 +182,17 @@ export default function DriverProfile() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Welcome</h1>
-        <div className='flex items-center space-x-4'>
-          <h2>{driver.name}</h2>
-          <Button className='text-gray-200' onClick={handleLogout}>Logout</Button>
-        </div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Welcome, {driver.name}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Due Amount: <span>₦0</span></p>
+          <Button className='text-gray-200 ml-auto block' onClick={handleLogout}>Logout</Button>
+        </CardContent>
+      </Card>
 
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle>Higher Purchase Plan</CardTitle>
