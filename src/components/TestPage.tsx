@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/AuthContext'
-import { useSupabase } from '@/contexts/SupabaseContext'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { useSupabase } from "@/contexts/SupabaseContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 interface Driver {
   id: number
@@ -29,26 +28,6 @@ interface Bus {
   t_income: string | null
   initial_owe: string | null
   coordinator_name: string | null
-  coordinator_email: string | null
-  coordinator_phone: string[]
-}
-
-interface Payment {
-  id: number;
-  created_at: string;
-  week: string | null;
-  coordinator: string | null;
-  bus: number | null;
-  p_week: string | null;
-  receipt: string | null;
-  amount: number | null;
-  sender: string | null;
-  payment_day: string | null;
-  payment_date: string | null;
-  pay_type: string | null;
-  pay_complete: boolean | null;
-  issue: string | null;
-  inspection: boolean | null;
 }
 
 // Format number as Naira
@@ -68,7 +47,7 @@ const calculateAmountLeft = (initialOwe: string | null, tIncome: string | null):
   return formatAsNaira((initial - income).toString())
 }
 
-export default function DriverProfile() {
+export default function TestPage() {
   const { user, role, signOut } = useAuth()
   const { supabase } = useSupabase()
   const navigate = useNavigate()
@@ -77,7 +56,6 @@ export default function DriverProfile() {
   const [buses, setBuses] = useState<Bus[]>([])
   const [loading, setLoading] = useState(true)
   const [busLoading, setBusLoading] = useState(true)
-  const [payments, setPayments] = useState<Payment[]>([]);  
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -112,7 +90,7 @@ export default function DriverProfile() {
           agreed_date,
           t_income,
           initial_owe,
-          coordinator:coordinators!buses_coordinator_fkey(name, email, phone)
+          coordinator:coordinators!buses_coordinator_fkey(name)
         `)
         .eq('driver', driverData.id)
 
@@ -129,9 +107,7 @@ export default function DriverProfile() {
           agreed_date: bus.agreed_date,
           t_income: bus.t_income,
           initial_owe: bus.initial_owe,
-          coordinator_name: bus.coordinator?.name || 'N/A',
-          coordinator_email: bus.coordinator?.email || 'N/A',
-          coordinator_phone: bus.coordinator?.phone || []
+          coordinator_name: bus.coordinator?.name || 'N/A'
         }))
         setBuses(formattedBuses)
       }
@@ -139,29 +115,7 @@ export default function DriverProfile() {
       setBusLoading(false)
       setLoading(false)
     }
-    const fetchPayments = async () => {
-      const busId = buses.length > 0 ? buses[0].id : null;
-      if (!busId) {
-        setPayments([]);
-        setLoading(false);
-        return;
-      }
-      const { data, error } = await supabase
-        .from("payment")
-        .select("*")
-        .eq("bus", busId)
-        .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching payments:", error);
-        setPayments([]);
-      } else {
-        setPayments(data as Payment[]);
-      }
-      setLoading(false);
-    };
-
-    fetchPayments();
     fetchDriver()
   }, [user, role, supabase, navigate])
 
@@ -184,9 +138,9 @@ export default function DriverProfile() {
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Welcome</h1>
-        <div className='flex items-center space-x-4'>
+        <div>
           <h2>{driver.name}</h2>
-          <Button className='text-gray-200' onClick={handleLogout}>Logout</Button>
+          <Button variant="outline" onClick={handleLogout}>Logout</Button>
         </div>
       </div>
 
@@ -219,7 +173,6 @@ export default function DriverProfile() {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate(`/payment/${bus.id}/history`)}
-                  className='mt-2 ml-auto block'
                 >
                   View Payments
                 </Button>
@@ -252,7 +205,7 @@ export default function DriverProfile() {
           </CardHeader>
           <CardContent>
             <p>Relax! You currently do not have Upcoming Payments</p>
-            
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">Set Repeat Transfers</button>
           </CardContent>
         </Card>
 
@@ -261,80 +214,41 @@ export default function DriverProfile() {
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-          {payments.length === 0 ? (
-            <p>No payments recorded yet.</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Sender</TableHead>
-                  <TableHead>Receipt</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Inspection</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payments.map((p) => (
-                  <TableRow key={p.id}>
-                    <TableCell>
-                      {p.payment_date || p.created_at.split("T")[0]}
-                    </TableCell>
-                    <TableCell>{p.amount ?? 0}</TableCell>
-                    <TableCell>{p.pay_type ?? "-"}</TableCell>
-                    <TableCell>{p.sender ?? "-"}</TableCell>
-                    <TableCell>{p.receipt ?? "-"}</TableCell>
-                    <TableCell>
-                      {p.pay_complete ? (
-                        <span className="text-green-600 font-medium">Complete</span>
-                      ) : (
-                        <span className="text-red-600 font-medium">Pending</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {p.inspection ? "✔️" : "❌"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+            <select className="w-full mb-2">
+              <option>Current And Savings</option>
+            </select>
+            <p>4481075992</p>
+            <p>16 Sep 2025 REF: B05ZTM25Z5901U NGN 50.00 Dr</p>
+            <p>15 Sep 2025 REF: B05Cdj252580097 VAT NIP TRANSFER IFO 322000155 Send Transport REF: ENG7815862028 Ref.</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Assigned Coordinator</CardTitle>
+            <CardTitle>Quick Access</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-           {busLoading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
-            </div>
-           ) : buses.length === 0 ? (
-            <p className="text-gray-500">No Coordinator Assigned to you.</p>
-           ) : (
-            buses.map((bus) => (
-              <div key={bus.id} className="border-t pt-2 mt-2">
-                <div><span className="font-semibold">Name:</span> {bus.coordinator_name}</div>
-                <div><span className="font-semibold">Email:</span> {bus.coordinator_email}</div>
-                <div><span className="font-semibold">Phone:</span> {bus.coordinator_phone}</div>
-                <Link to="/contact">
-                <Button
-                  size="sm"
-                  className='mt-2 ml-auto block text-gray-200'
-                >
-                  Contact
-                </Button>
-                </Link>
-              </div>
-        ))
-           )}
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-arrow-right mr-2" /> Transfer to saved Beneficiary
+            </button>
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-phone mr-2" /> Buy Airtime
+            </button>
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-heart mr-2" /> Favorites
+            </button>
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-transfer mr-2" /> Transfer to saved Beneficiary
+            </button>
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-receipt mr-2" /> Pay Bills
+            </button>
+            <button className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded">
+              <span className="i-tabler-data mr-2" /> Buy Data
+            </button>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
