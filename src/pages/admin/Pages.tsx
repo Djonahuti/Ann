@@ -83,12 +83,12 @@ export default function AdminPages() {
           <p className="mt-2 text-gray-600">Manage your website pages and content</p>
         </div>
         <Link to="/admin/pages/new">
-          <Button>New Page</Button>
+          <Button className='text-gray-200'>New Page</Button>
         </Link>
       </div>
 
       {/* Search */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-900">
         <CardHeader>
           <CardTitle>Search Pages</CardTitle>
           <CardDescription>Find and filter your website pages</CardDescription>
@@ -103,7 +103,7 @@ export default function AdminPages() {
       </Card>
 
       {/* Pages List */}
-      <Card>
+      <Card className="bg-white dark:bg-gray-900">
         <CardHeader>
           <CardTitle>All Pages ({filteredPages.length})</CardTitle>
         </CardHeader>
@@ -122,7 +122,10 @@ export default function AdminPages() {
                 </div>
               </div>
               <div className="flex items-center space-x-2">
-                <Badge variant={page.is_published ? "default" : "secondary"}>
+                <Badge
+                 variant={page.is_published ? "default" : "secondary"}
+                className="px-2 py-1 text-sm text-gray-200"
+                >
                   {page.is_published ? "Published" : "Draft"}
                 </Badge>
                 <Link to={`/admin/pages/edit/${page.id}`}>
