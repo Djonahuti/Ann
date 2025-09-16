@@ -3,6 +3,8 @@ import { useSupabase } from '@/contexts/SupabaseContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 interface Payment {
   id: number
@@ -49,7 +51,7 @@ export default function ViewPayments() {
   }, [supabase])
 
   return (
-    <Card className="max-w-5xl mx-auto">
+    <Card className="max-w-5xl mx-auto bg-white dark:bg-gray-900">
       <CardHeader>
         <CardTitle>Payments</CardTitle>
       </CardHeader>
@@ -81,7 +83,7 @@ export default function ViewPayments() {
 
                   {/* ✅ Editable Expected Payment */}
                   <TableCell>
-                    <input
+                    <Input
                       type="number"
                       defaultValue={p.bus?.e_payment || 0}
                       onBlur={async (e) => {
@@ -100,21 +102,45 @@ export default function ViewPayments() {
 
                   {/* ✅ Editable Pay Status */}
                   <TableCell>
-                    <select
+                    <Select
                       defaultValue={p.pay_complete || 'Pending'}
-                      onChange={async (e) => {
-                        const status = e.target.value
+                      onValueChange={async (status) => {
                         await supabase
                           .from('payment')
                           .update({ pay_complete: status })
                           .eq('id', p.id)
                       }}
-                      className="border rounded px-2 py-1"
                     >
-                      <option value="YES">YES</option>
-                      <option value="INCOMPLETE">INCOMPLETE</option>
-                      <option value="Pending">Pending</option>
-                    </select>
+                      <SelectTrigger>
+                        <SelectValue placeholder={p.pay_complete} />
+                      </SelectTrigger>
+                      <SelectContent className="border rounded px-2 py-1">
+                        <SelectItem
+                         value="YES"
+                         className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                        >
+                          YES
+                        </SelectItem>
+                        <SelectItem
+                         value="INCOMPLETE"
+                         className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                        >
+                          INCOMPLETE
+                        </SelectItem>
+                        <SelectItem
+                         value="Pending"
+                         className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                        >
+                          Pending
+                        </SelectItem>
+                        <SelectItem
+                         value="NO"
+                         className='data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200'
+                        >
+                          NO
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </TableCell>
 
                   <TableCell>{new Date(p.created_at).toLocaleDateString()}</TableCell>
