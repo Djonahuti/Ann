@@ -190,7 +190,7 @@ export default function DriverProfile() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle>Higher Purchase Plan</CardTitle>
@@ -245,7 +245,7 @@ export default function DriverProfile() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
         <Card>
           <CardHeader>
             <CardTitle>Upcoming Payments</CardTitle>
