@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,43 +6,57 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { supabase } from '@/lib/supabase'
+import { Controller, useForm } from 'react-hook-form'
+
+// Validation schema
+const contactSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+  company: z.string().optional(),
+  subject: z.string().optional(),
+  message: z.string().min(5, "Message must be at least 5 characters"),
+  service: z.string().optional()
+})
+
+type ContactFormData = z.infer<typeof contactSchema>
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    company: '',
-    message: '',
-    service: 'higher-purchase'
+  const { control, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      service: "higher-purchase"
+    }
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      const { error } = await supabase.from("contact_us").insert([
+        {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          company: data.company,
+          subject: data.subject ?? data.service,
+          message: data.message,
+        }
+      ])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast("Message sent successfully!\nWe'll get back to you within 24 hours.")
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        company: '',
-        message: '',
-        service: 'higher-purchase'
-      })
-      setIsSubmitting(false)
-    }, 1000)
-  }
+      if (error) {
+        console.error(error)
+        toast.error("Something went wrong. Please try again.")
+        return
+      }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
+      toast.success("Message sent successfully! We'll get back to you soon.")
+      reset()
+    } catch (err) {
+      console.error(err)
+      toast.error("Unexpected error occurred.")
+    }
   }
 
   return (
@@ -83,120 +96,115 @@ export default function ContactPage() {
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-300 mb-8">
                 Send us a message
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="name">Full Name *</Label>
-                    <Input
-                      id="name"
+                    <Controller
                       name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="mt-2"
+                      control={control}
+                      render={({ field }) => (
+                        <Input id="name" {...field} className="mt-2" />
+                      )}
                     />
+                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                   </div>
                   <div>
                     <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
+                    <Controller
                       name="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="mt-2"
+                      control={control}
+                      render={({ field }) => (
+                        <Input id="email" type="email" {...field} className="mt-2" />
+                      )}
                     />
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
+                    <Controller
                       name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="mt-2"
+                      control={control}
+                      render={({ field }) => (
+                        <Input id="phone" type="tel" {...field} className="mt-2" />
+                      )}
                     />
                   </div>
                   <div>
                     <Label htmlFor="company">Company Name</Label>
-                    <Input
-                      id="company"
+                    <Controller
                       name="company"
-                      type="text"
-                      value={formData.company}
-                      onChange={handleChange}
-                      className="mt-2"
+                      control={control}
+                      render={({ field }) => (
+                        <Input id="company" type="text" {...field} className="mt-2" />
+                      )}
                     />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="service">Service of Interest</Label>
-                  <Select
-                    value={formData.service}
-                    onValueChange={(value) =>
-                      setFormData((prev) => ({ ...prev, service: value }))
-                    }
-                  >
-                    <SelectTrigger className="mt-2 w-full">
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Services</SelectLabel>
-                        <SelectItem
-                          value="higher-purchase"
-                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
-                        >
-                          Bus Higher Purchase
-                        </SelectItem>
-                        <SelectItem
-                          value="fleet-management"
-                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
-                        >
-                          Fleet Management
-                        </SelectItem>
-                        <SelectItem
-                          value="consulting"
-                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
-                        >
-                          Business Consulting
-                        </SelectItem>
-                        <SelectItem
-                          value="other"
-                          className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
-                        >
-                          Other Services
-                        </SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    name="service"
+                    control={control}
+                    render={({ field }) => (
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <SelectTrigger className="mt-2 w-full">
+                          <SelectValue placeholder="Select a service" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Services</SelectLabel>
+                            <SelectItem
+                              value="higher-purchase"
+                              className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                            >
+                              Bus Higher Purchase
+                            </SelectItem>
+                            <SelectItem
+                              value="fleet-management"
+                              className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                            >
+                              Fleet Management
+                            </SelectItem>
+                            <SelectItem
+                              value="consulting"
+                              className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                            >
+                              Business Consulting
+                            </SelectItem>
+                            <SelectItem
+                              value="other"
+                              className="data-[state=checked]:bg-primary data-[state=checked]:text-gray-200 data-[highlighted]:bg-primary-light data-[highlighted]:text-gray-200"
+                            >
+                              Other Services
+                            </SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
 
                 <div>
                   <Label htmlFor="message">Message *</Label>
-                  <Textarea
-                    id="message"
+                  <Controller
                     name="message"
-                    rows={6}
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="mt-2"
-                    placeholder="Tell us about your bus financing needs..."
+                    control={control}
+                    render={({ field }) => (
+                      <Textarea id="message" rows={6} {...field} className="mt-2" />
+                    )}
                   />
+                  {errors.message && <p className="text-red-500 text-sm">{errors.message.message}</p>}
                 </div>
 
                 <Button 
                   type="submit" 
                   size="lg" 
-                  className="w-full hover:bg-primary-dark text-gray-1 dark:text-gray-40000"
+                  className="w-full hover:bg-primary-dark text-gray-200"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
