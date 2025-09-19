@@ -232,6 +232,7 @@ create table public.contact (
   is_starred boolean null,
   is_read boolean null,
   attachment text null,
+  sender text null,
   constraint contact_pkey primary key (id),
   constraint contact_coordinator_fkey foreign KEY (coordinator) references coordinators (id) on delete set null,
   constraint contact_driver_fkey foreign KEY (driver) references driver (id) on delete set null,
