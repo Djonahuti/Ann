@@ -6,6 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSupabase } from '@/contexts/SupabaseContext';
+import { SendHorizontal } from 'lucide-react';
+import Modal from '@/components/Modal';
+import Contact from '../Contact';
 
 interface Bus {
   id: number;
@@ -22,6 +25,8 @@ export default function UserProfile() {
   const [buses, setBuses] = useState<Bus[]>([])
   const [loading, setLoading] = useState(true)
   const [coordinator, setCoordinator] = useState<any>(null)
+  const [isContactModalOpen, setContactModalOpen] = useState(false);
+  const [selectedDriverId, setSelectedDriverId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCoordinatorAndBuses = async () => {
@@ -102,6 +107,11 @@ export default function UserProfile() {
           <p>Email: {coordinator?.email}</p>
           {coordinator?.phone && <p>Phone: {coordinator.phone.join(', ')}</p>}
         </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button onClick={handleLogout} className='text-gray-200'>
+            Logout
+          </Button>
+        </CardFooter>        
       </Card>
       <Card>
         <CardHeader>
@@ -141,6 +151,15 @@ export default function UserProfile() {
                       >
                         View Payments
                       </Button>
+                      <Button
+                       className='mt-2 ml-auto block text-gray-200'
+                       onClick={() => {
+                         setSelectedDriverId(bus.driver_name !== 'N/A' ? bus.id : null);
+                         setContactModalOpen(true);
+                       }}
+                      >
+                       <SendHorizontal />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -148,12 +167,11 @@ export default function UserProfile() {
             </Table>
           )}
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button variant="destructive" onClick={handleLogout}>
-            Logout
-          </Button>
-        </CardFooter>
       </Card>
+      {/* Contact Modal */}
+      <Modal isOpen={isContactModalOpen} onClose={() => setContactModalOpen(false)}>
+        <Contact driverId={selectedDriverId} />
+      </Modal>    
     </div>
   )
 }

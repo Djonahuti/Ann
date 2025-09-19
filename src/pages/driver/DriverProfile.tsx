@@ -1,10 +1,14 @@
+
+// DriverProfile.tsx
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSupabase } from '@/contexts/SupabaseContext'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import Modal from '@/components/Modal'
+import Contact from '../Contact'
 
 interface Driver {
   id: number
@@ -78,6 +82,7 @@ export default function DriverProfile() {
   const [loading, setLoading] = useState(true)
   const [busLoading, setBusLoading] = useState(true)
   const [payments, setPayments] = useState<Payment[]>([]);  
+  const [isContactModalOpen, setContactModalOpen] = useState(false);  
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -323,20 +328,26 @@ export default function DriverProfile() {
                 <div><span className="font-semibold">Name:</span> {bus.coordinator_name}</div>
                 <div><span className="font-semibold">Email:</span> {bus.coordinator_email}</div>
                 <div><span className="font-semibold">Phone:</span> {bus.coordinator_phone}</div>
-                <Link to="/contact">
-                <Button
-                  size="sm"
-                  className='mt-2 ml-auto block text-gray-200'
-                >
-                  Contact
-                </Button>
-                </Link>
               </div>
         ))
            )}
+           <Button
+            className='mt-2 ml-auto block text-gray-200'
+            onClick={() => setContactModalOpen(true)}
+           >
+            Contact
+           </Button>
           </CardContent>
         </Card>
       </div>
+
+      {/* Contact Modal */}
+      <Modal isOpen={isContactModalOpen} onClose={() => setContactModalOpen(false)}>
+        <Contact
+          coordinatorId={buses[0]?.id ? buses[0].id : null}
+        />
+      </Modal>
+
     </div>
   )
 }
