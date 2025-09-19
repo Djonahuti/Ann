@@ -25,6 +25,8 @@ import ViewUsers from './pages/admin/ViewUsers'
 import Settings from './pages/admin/Settings'
 import SettingsEdit from './pages/admin/SettingsEdit'
 import { ThemeProvider } from './components/ThemeProvider'
+import MailLayout from './layouts/MailLayout'
+import MailView from './components/mail/MailView'
 
 function App() {
   return (
@@ -60,6 +62,11 @@ function App() {
               <Route path="/admin/pages/new" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />
               <Route path="/admin/pages/edit/:id" element={<ProtectedRoute><PageEdit /></ProtectedRoute>} />              
             </Route>
+
+            <Route element={<MailLayout />}>
+              <Route path="/my-inbox" element={<ProtectedRoute><MailView /></ProtectedRoute>} />
+            </Route>
+
           </Routes>
           <Toaster />
         </div>
