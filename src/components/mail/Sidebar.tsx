@@ -24,6 +24,7 @@ import ThemeToggle from "@/components/ThemeToggle"
 import { supabase } from "@/lib/supabase"
 import { MailContext } from "@/contexts/MailContext"
 import { NavUser } from "./NavUser"
+import { useEffect as useThemeEffect } from 'react';
 
 // This is sample data
 const data = {
@@ -97,6 +98,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { setOpen } = useSidebar()
   const [contacts, setContacts] = React.useState<Contact[]>([]);
   const { setSelectedMail, activeFilter, setActiveFilter } = React.useContext(MailContext)
+    const [settings, setSettings] = React.useState<any>(null);
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
+
+  React.useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase.from("settings").select("*").single();
+      if (!error) setSettings(data);
+    };
+    fetchSettings();
+  }, []);  
 
   const handleSelectMail = async (mail: Contact) => {
     setOpen(true)
@@ -187,7 +198,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           is_read: newUnreadStatus,
         }))
       );
-    };    
+    };
+
+  // Listen for theme changes
+  useThemeEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateTheme = () => setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    updateTheme();
+    mq.addEventListener('change', updateTheme);
+    // Listen for class changes (ThemeToggle likely toggles 'dark' class)
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => {
+      mq.removeEventListener('change', updateTheme);
+      observer.disconnect();
+    };
+  }, []);
+
+  if (!settings) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // Choose logo based on theme
+  const logoKey = theme === 'dark' ? 'logo_blk' : 'logo';
+  const logoPath = settings[logoKey] || settings.logo || 'logo.png';
+  const logoUrl = logoPath
+    ? supabase.storage.from("receipts").getPublicUrl(logoPath).data.publicUrl
+    : "/logo/logo.png"; // fallback    
 
   return (
     <Sidebar
@@ -206,10 +247,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <a href="/dashboard">
+                <a href="/admin">
                   <div className="flex aspect-square size-8 items-center justify-center text-sidebar-primary-foreground">
                   <img
-                  src="/logo/ushop-small.svg"
+                  src={logoUrl}
                   alt="logo"
                   width={85}
                   height={20}

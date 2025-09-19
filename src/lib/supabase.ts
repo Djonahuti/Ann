@@ -8,7 +8,13 @@ if (import.meta.env.DEV && (!import.meta.env.VITE_SUPABASE_URL || !import.meta.e
   console.warn('Missing Supabase environment variables')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,      // 🔑 keep session in localStorage
+    autoRefreshToken: true,    // 🔑 refresh expired tokens
+    detectSessionInUrl: true,  // 🔑 needed for OAuth redirects
+  },
+})
 
 // Database types
 export interface Page {

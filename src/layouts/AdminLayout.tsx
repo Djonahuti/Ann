@@ -12,7 +12,8 @@ import {
   Bus,
   Coins,
   Contact,
-  Users
+  Users,
+  Mail
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
@@ -28,6 +29,7 @@ import ThemeToggle from '@/components/ThemeToggle'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: Home },
+  { name: 'Mailbox', href: '/my-inbox', icon: Mail },
   { name: 'Add Bus', href: '/admin/add-bus', icon: Bus },
   { name: 'Drivers', href: '/admin/drivers', icon: Contact },
   { name: 'View Users', href: '/admin/users', icon: Users },

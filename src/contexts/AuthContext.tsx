@@ -23,11 +23,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
       setLoading(false)
+
+      if (session?.user) {
+        const savedRole = localStorage.getItem("role") as 'driver' | 'admin' | 'coordinator' | null
+        if (savedRole) setRole(savedRole)
+      }      
     })
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      if (!session) {
+        setRole(null)
+        localStorage.removeItem("role")
+      } else {
+        const savedRole = localStorage.getItem("role") as 'driver' | 'admin' | 'coordinator' | null
+        if (savedRole) setRole(savedRole)
+      }      
       setLoading(false)
     })
 
@@ -65,12 +77,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     setRole(foundRole ?? null)
+    if (foundRole) localStorage.setItem("role", foundRole)
+
     return { error: null, role: foundRole }
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
     setRole(null)
+    localStorage.removeItem("role")
   }
 
   const value = {
