@@ -40,17 +40,17 @@ const navigation = [
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { user, role, signOut } = useAuth()
+  const { user, role, loading, signOut } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [settings, setSettings] = useState<any>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    if (!user || role !== 'admin') {
+    if (!loading && (!user || role !== 'admin')) {
       navigate('/login') // or '/admin/login' if you want separate login
     }
-  }, [user, role, navigate])
+  }, [user, role, loading, navigate])
 
   const handleSignOut = async () => {
     await signOut()
@@ -80,7 +80,7 @@ export default function AdminLayout() {
     };
   }, []);
 
-  if (!settings) {
+  if (loading || !settings) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>

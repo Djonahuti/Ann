@@ -73,7 +73,7 @@ const calculateAmountLeft = (initialOwe: string | null, tIncome: string | null):
 }
 
 export default function DriverProfile() {
-  const { user, role, signOut } = useAuth()
+  const { user, role, loading: authLoading, signOut } = useAuth()
   const { supabase } = useSupabase()
   const navigate = useNavigate()
 
@@ -86,15 +86,19 @@ export default function DriverProfile() {
 
   useEffect(() => {
     const fetchDriver = async () => {
-      if (!user || role !== 'driver') {
+      if (!authLoading && (!user || role !== 'driver')) {
         return navigate('/login')
+      }
+
+      if (authLoading) {
+        return // Wait for auth to finish loading
       }
 
       // Fetch driver info
       const { data: driverData, error } = await supabase
         .from('driver')
         .select('*')
-        .eq('email', user.email)
+        .eq('email', user!.email)
         .single()
 
       if (error || !driverData) {
@@ -168,14 +172,14 @@ export default function DriverProfile() {
 
     fetchPayments();
     fetchDriver()
-  }, [user, role, supabase, navigate])
+  }, [user, role, authLoading, supabase, navigate])
 
   const handleLogout = async () => {
     await signOut()
     navigate('/login')
   }
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>

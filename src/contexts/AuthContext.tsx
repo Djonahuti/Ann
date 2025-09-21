@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null
   loading: boolean
   role: 'driver' | 'admin' | 'coordinator' | null
-  signIn: (email: string, password: string) => Promise<{ error: any, role?: string }>
+  signIn: (email: string, password: string) => Promise<{ error: any, role?: string | null }>
   signOut: () => Promise<void>
 }
 
@@ -18,27 +18,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState<'driver' | 'admin' | 'coordinator' | null>(null)
 
+  const fetchUserRole = async (email: string) => {
+    try {
+      // Check role tables and banned status
+      let foundRole: 'driver' | 'admin' | 'coordinator' | undefined = undefined
+      let banned = false;
+
+      const { data: driver } = await supabase.from('driver').select('id, banned').eq('email', email).single()
+      if (driver) {
+        foundRole = 'driver';
+        if (driver.banned) banned = true;
+      }
+
+      const { data: admin } = await supabase.from('admins').select('id, banned').eq('email', email).single()
+      if (admin) {
+        foundRole = 'admin';
+        if (admin.banned) banned = true;
+      }
+
+      const { data: coordinator } = await supabase.from('coordinators').select('id, banned').eq('email', email).single()
+      if (coordinator) {
+        foundRole = 'coordinator';
+        if (coordinator.banned) banned = true;
+      }
+
+      if (banned) {
+        // If user is banned, sign them out
+        await supabase.auth.signOut()
+        setRole(null)
+        localStorage.removeItem("role")
+        return
+      }
+
+      setRole(foundRole ?? null)
+      if (foundRole) localStorage.setItem("role", foundRole)
+    } catch (error) {
+      console.error('Error fetching user role:', error)
+    }
+  }
+
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null)
-      setLoading(false)
 
       if (session?.user) {
         const savedRole = localStorage.getItem("role") as 'driver' | 'admin' | 'coordinator' | null
-        if (savedRole) setRole(savedRole)
-      }      
+        if (savedRole) {
+          setRole(savedRole)
+        } else {
+          // If no role in localStorage, fetch it from database
+          await fetchUserRole(session.user.email!)
+        }
+      }
+      setLoading(false)
     })
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null)
       if (!session) {
         setRole(null)
         localStorage.removeItem("role")
       } else {
         const savedRole = localStorage.getItem("role") as 'driver' | 'admin' | 'coordinator' | null
-        if (savedRole) setRole(savedRole)
+        if (savedRole) {
+          setRole(savedRole)
+        } else {
+          // If no role in localStorage, fetch it from database
+          await fetchUserRole(session.user.email!)
+        }
       }      
       setLoading(false)
     })
@@ -50,36 +99,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error }
 
-    // Check role tables and banned status
-    let foundRole: 'driver' | 'admin' | 'coordinator' | undefined = undefined
-    let banned = false;
+    // Use the fetchUserRole function to get role and check banned status
+    await fetchUserRole(email)
+    
+    // Get the role that was set by fetchUserRole
+    const currentRole = localStorage.getItem("role") as 'driver' | 'admin' | 'coordinator' | null
 
-    const { data: driver } = await supabase.from('driver').select('id, banned').eq('email', email).single()
-    if (driver) {
-      foundRole = 'driver';
-      if (driver.banned) banned = true;
-    }
-
-    const { data: admin } = await supabase.from('admins').select('id, banned').eq('email', email).single()
-    if (admin) {
-      foundRole = 'admin';
-      if (admin.banned) banned = true;
-    }
-
-    const { data: coordinator } = await supabase.from('coordinators').select('id, banned').eq('email', email).single()
-    if (coordinator) {
-      foundRole = 'coordinator';
-      if (coordinator.banned) banned = true;
-    }
-
-    if (banned) {
-      return { error: { message: 'Your account has been banned. Please contact support.' } };
-    }
-
-    setRole(foundRole ?? null)
-    if (foundRole) localStorage.setItem("role", foundRole)
-
-    return { error: null, role: foundRole }
+    return { error: null, role: currentRole }
   }
 
   const signOut = async () => {

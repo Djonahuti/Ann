@@ -19,7 +19,7 @@ interface Bus {
 
 export default function UserProfile() {
   const navigate = useNavigate()
-  const { user, role, signOut } = useAuth()
+  const { user, role, loading: authLoading, signOut } = useAuth()
   const { supabase } = useSupabase()
 
   const [buses, setBuses] = useState<Bus[]>([])
@@ -30,16 +30,20 @@ export default function UserProfile() {
 
   useEffect(() => {
     const fetchCoordinatorAndBuses = async () => {
-      if (!user || role !== 'coordinator') {
+      if (!authLoading && (!user || role !== 'coordinator')) {
         navigate('/login')
         return
+      }
+
+      if (authLoading) {
+        return // Wait for auth to finish loading
       }
 
       // Find coordinator record by email
       const { data: coData, error: coError } = await supabase
         .from('coordinators')
         .select('*')
-        .eq('email', user.email)
+        .eq('email', user?.email ?? '')
         .single()
 
       if (coError || !coData) {
@@ -77,14 +81,14 @@ export default function UserProfile() {
     }
 
     fetchCoordinatorAndBuses()
-  }, [user, role, supabase, navigate])
+  }, [user, role, authLoading, supabase, navigate])
 
   const handleLogout = async () => {
     await signOut()
     navigate('/login')
   }
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="max-w-4xl mx-auto py-12">
         <Skeleton className="h-8 w-1/3 mb-6" />
