@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSupabase } from '@/contexts/SupabaseContext';
-import { SendHorizontal } from 'lucide-react';
+import { Mail, SendHorizontal } from 'lucide-react';
 import Modal from '@/components/Modal';
 import Contact from '../Contact';
 
@@ -111,7 +111,12 @@ export default function UserProfile() {
           <p>Email: {coordinator?.email}</p>
           {coordinator?.phone && <p>Phone: {coordinator.phone.join(', ')}</p>}
         </CardContent>
-        <CardFooter className="flex justify-end">
+        <CardFooter className="flex justify-between">
+          <Link to="/my-inbox" className="mr-auto">
+            <Button className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-primary-dark hover:to-primary-dark transform transition duration-300 ease-in-out hover:scale-105">
+              <Mail />Inbox
+            </Button>
+          </Link>
           <Button onClick={handleLogout} className='text-gray-200'>
             Logout
           </Button>

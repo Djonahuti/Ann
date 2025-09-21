@@ -1,14 +1,15 @@
 
 // DriverProfile.tsx
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
 import { useSupabase } from '@/contexts/SupabaseContext'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Modal from '@/components/Modal'
 import Contact from '../Contact'
+import { Mail } from 'lucide-react'
 
 interface Driver {
   id: number
@@ -197,8 +198,17 @@ export default function DriverProfile() {
         </CardHeader>
         <CardContent>
           <p>Due Amount: <span>₦0</span></p>
-          <Button className='text-gray-200 ml-auto block' onClick={handleLogout}>Logout</Button>
         </CardContent>
+        <CardFooter className="flex justify-between">
+          <Link to="/my-inbox" className="mr-auto">
+            <Button className="bg-gradient-to-r from-gray-600 to-primary-light text-gray-200 hover:from-primary-dark hover:to-primary-dark transform transition duration-300 ease-in-out hover:scale-105">
+              <Mail />Inbox
+            </Button>
+          </Link>
+          <Button onClick={handleLogout} className='text-gray-200'>
+            Logout
+          </Button>
+        </CardFooter>         
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
