@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 interface ContactProps {
   coordinatorId?: number | null;
@@ -26,6 +27,8 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
   const [selectedSubject, setSelectedSubject] = useState<number | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [currentName, setCurrentName] = useState<string>("");
 
   // Load subjects
   useEffect(() => {
@@ -36,6 +39,29 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
     fetchSubjects();
   }, [supabase]);
 
+  // Fetch current user name depending on role
+  useEffect(() => {
+    const fetchName = async () => {
+      if (!user) return;
+      if (role === "driver") {
+        const { data } = await supabase
+          .from("driver")
+          .select("name")
+          .eq("email", user.email)
+          .single();
+        if (data?.name) setCurrentName(data.name);
+      } else if (role === "coordinator") {
+        const { data } = await supabase
+          .from("coordinators")
+          .select("name")
+          .eq("email", user.email)
+          .single();
+        if (data?.name) setCurrentName(data.name);
+      }
+    };
+    fetchName();
+  }, [user, role, supabase]);  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSubject || !message.trim()) {
@@ -45,16 +71,48 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
 
     setLoading(true);
 
+    let attachmentUrl: string | null = null;
+
+    // Upload file if present
+    if (file) {
+      const filePath = `${Date.now()}-${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from("receipts")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error("File upload failed:", uploadError);
+        alert("Attachment upload failed.");
+      } else {
+        const { data: urlData } = supabase.storage
+          .from("attachments")
+          .getPublicUrl(filePath);
+        attachmentUrl = urlData.publicUrl;
+      }
+    }
+
     const payload: any = {
       subject: selectedSubject,
       message,
+      sender: currentName || user?.email, // fallback to email
+      attachment: attachmentUrl,
     };
 
     if (role === "driver") {
-      payload.driver = await getDriverId();
+      const { data } = await supabase
+        .from("driver")
+        .select("id")
+        .eq("email", user?.email)
+        .single();
+      payload.driver = data?.id || null;
       payload.coordinator = coordinatorId;
     } else if (role === "coordinator") {
-      payload.coordinator = await getCoordinatorId();
+      const { data } = await supabase
+        .from("coordinators")
+        .select("id")
+        .eq("email", user?.email)
+        .single();
+      payload.coordinator = data?.id || null;
       payload.driver = driverId;
     }
 
@@ -69,28 +127,9 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
       alert("Message sent!");
       setMessage("");
       setSelectedSubject(null);
+      setFile(null);
       if (onSuccess) onSuccess();
     }
-  };
-
-  const getDriverId = async () => {
-    if (!user) return null;
-    const { data } = await supabase
-      .from("driver")
-      .select("id")
-      .eq("email", user.email)
-      .single();
-    return data?.id || null;
-  };
-
-  const getCoordinatorId = async () => {
-    if (!user) return null;
-    const { data } = await supabase
-      .from("coordinators")
-      .select("id")
-      .eq("email", user.email)
-      .single();
-    return data?.id || null;
   };
 
   return (
@@ -126,6 +165,26 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
           rows={4}
         />
       </div>
+
+      <div>
+        <Label className="block text-sm font-medium mb-1">Sender</Label>
+        <Input
+          type="text"
+          value={currentName}
+          readOnly
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+
+      <div>
+        <Label className="block text-sm font-medium mb-1">Attachment</Label>
+        <Input
+          type="file"
+          accept="image/*,application/pdf"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+        {file && <p className="text-sm text-gray-600 mt-1">Selected: {file.name}</p>}
+      </div>         
 
       <Button type="submit" disabled={loading} className="text-gray-200">
         {loading ? "Sending..." : "Send Message"}
