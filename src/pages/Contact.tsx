@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 interface ContactProps {
   coordinatorId?: number | null;
@@ -103,21 +104,47 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
     };
 
     if (role === "driver") {
-      const { data } = await supabase
+      // get sender (driver)
+      const { data: driver } = await supabase
         .from("driver")
-        .select("id")
+        .select("id, name, email")
         .eq("email", user?.email)
         .single();
-      payload.driver = data?.id || null;
-      payload.coordinator = coordinatorId;
-    } else if (role === "coordinator") {
-      const { data } = await supabase
+
+      // get receiver (coordinator)
+      const { data: coord } = await supabase
         .from("coordinators")
-        .select("id")
+        .select("id, name, email")
+        .eq("id", coordinatorId)
+        .single();
+
+      payload.driver = driver?.id || null;
+      payload.coordinator = coordinatorId;
+      payload.sender = driver?.name || user?.email;
+      payload.sender_email = driver?.email || user?.email;
+      payload.receiver = coord?.name || "Unknown";
+      payload.receiver_email = coord?.email || "";
+    } else if (role === "coordinator") {
+      // get sender (coordinator)
+      const { data: coord } = await supabase
+        .from("coordinators")
+        .select("id, name, email")
         .eq("email", user?.email)
         .single();
-      payload.coordinator = data?.id || null;
+
+      // get receiver (driver)
+      const { data: driver } = await supabase
+        .from("driver")
+        .select("id, name, email")
+        .eq("id", driverId) // 👈 driverId is passed from props
+        .single();
+
+      payload.coordinator = coord?.id || null;
       payload.driver = driverId;
+      payload.sender = coord?.name || user?.email;
+      payload.sender_email = coord?.email || user?.email;
+      payload.receiver = driver?.name || "Unknown";
+      payload.receiver_email = driver?.email || "";      
     }
 
     const { error } = await supabase.from("contact").insert(payload);
@@ -126,9 +153,9 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
 
     if (error) {
       console.error("Failed to send message:", error);
-      alert("Failed to send message.");
+      toast.error("Failed to send message.");
     } else {
-      alert("Message sent!");
+      toast.success("Message sent!");
       setMessage("");
       setSelectedSubject(null);
       setFile(null);
@@ -167,16 +194,6 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
           rows={4}
-        />
-      </div>
-
-      <div>
-        <Label className="block text-sm font-medium mb-1">Sender</Label>
-        <Input
-          type="text"
-          value={currentName}
-          readOnly
-          className="w-full border rounded px-3 py-2"
         />
       </div>
 
