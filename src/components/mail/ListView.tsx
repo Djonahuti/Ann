@@ -3,6 +3,7 @@ import { Contact } from "@/types"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { MailContext } from "@/contexts/MailContext"
 import { supabase } from "@/lib/supabase"
+import { useAuth } from "@/contexts/AuthContext"
 
 /**
  * ListView: a full-screen list of inbox messages for mobile.
@@ -11,15 +12,18 @@ import { supabase } from "@/lib/supabase"
 export default function ListView() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const { setSelectedMail, activeFilter } = useContext(MailContext)
+  const { user, role } = useAuth()  
 
   const handleSelectMail = async (mail: Contact) => {
     setSelectedMail(mail); // This now pushes it to Inbox.tsx
 
-    // Mark the contact as read
-    await supabase
-      .from('contacts')
-      .update({ is_read: true })
-      .eq('id', mail.id);
+    if (mail.source !== "contact_us") {
+      // Only mark normal contact rows as read
+      await supabase
+        .from("contact")
+        .update({ is_read: true })
+        .eq("id", mail.id)
+    }
   };
 
   // Fetch messages
@@ -32,19 +36,80 @@ export default function ListView() {
 
       if (activeFilter === "Starred") {
         query = query.eq('is_starred', true);
-      } else if (activeFilter === "Important") {
+      } else if (activeFilter === "Important" && role !== "admin") {
         query = query.eq('is_read', false);
       }
 
-      const { data, error } = await query;
-      if (error) {
-        console.error('Error loading contacts:', error)
-      } else {
-        setContacts(data || [])
+      // fetch normal contacts
+      const { data, error } = await query
+      let mapped: Contact[] = []
+      if (!error && data) {
+        mapped = (data as Contact[]).map((c) => ({
+          ...c,
+          source: "contact",
+        }))
       }
+
+      let normalizedContacts: Contact[] = []
+      // --- 🔑 Apply role-based filtering ---
+      if (role === "driver") {
+        const { data: driver } = await supabase
+          .from("driver")
+          .select("id,name")
+          .eq("email", user?.email)
+          .single()
+        if (activeFilter === "Sent") {
+          query = query.eq("sender", driver?.name || "")
+        } else {
+          query = query.eq("driver", driver?.id || 0)
+        }
+      } else if (role === "coordinator") {
+        const { data: coord } = await supabase
+          .from("coordinators")
+          .select("id,name")
+          .eq("email", user?.email)
+          .single()
+        if (activeFilter === "Sent") {
+          query = query.eq("sender", coord?.name || "")
+        } else {
+          query = query.eq("coordinator", coord?.id || 0)
+        }
+      } else if (role === "admin" && activeFilter === "Important") {
+        // Admin: fetch external contact_us + normal contact
+        const { data: contactUs } = await supabase
+          .from("contact_us")
+          .select("*")
+          .order("created_at", { ascending: false })
+
+        if (contactUs) {
+          normalizedContacts = contactUs.map((c: any) => ({
+            id: c.id,
+            coordinator_id: 0,
+            driver_id: 0,
+            subject_id: 0,
+            message: c.message,
+            created_at: c.created_at,
+            transaction_date: null,
+            is_starred: false,
+            is_read: false,
+            attachment: null,
+            sender: c.name || "Unknown",
+            receiver: "Admin",
+            sender_email: c.email || "",
+            receiver_email: "",
+            driver: null,
+            subject: { subject: c.subject || "Contact Us" },
+            coordinator: null,
+            source: "contact_us",
+          }))
+        }
+      }
+
+      setContacts([...mapped, ...normalizedContacts]) // clear first
     }
+
     fetchContacts()
-  }, [activeFilter])
+  }, [activeFilter, role, user])
 
   // Helpers for time formatting
   const formatTime = (date: Date) =>
@@ -88,7 +153,7 @@ export default function ListView() {
     <div className="flex-1 overflow-y-auto bg-background">
       {contacts.map((contact) => (
         <div
-          key={contact.id}
+          key={`${contact.source}-${contact.id}`}
           onClick={() => setSelectedMail(contact)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") setSelectedMail(contact);
@@ -106,10 +171,10 @@ export default function ListView() {
                 className="w-6 h-6 rounded-full object-cover"
               />                     
             ):(
-              <AvatarFallback className="rounded-lg">{contact.driver?.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback className="rounded-lg">{contact.sender.substring(0, 2).toUpperCase()}</AvatarFallback>
             )}
             </Avatar>
-            <span className="font-medium">{contact.driver?.name}</span>
+            <span className="font-medium">{contact.sender}</span>
             <span className="ml-auto text-xs text-muted-foreground">
               {formatSubmittedAt(contact.created_at)}
             </span>

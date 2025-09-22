@@ -30,50 +30,61 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useEffect, useState } from "react"
-import { Admin } from "@/types"
 import { Link } from "react-router-dom"
 import { supabase } from "@/lib/supabase"
+import { useAuth } from "@/contexts/AuthContext"
+
+type UserData = {
+  id: number
+  name: string
+  email: string
+  avatar?: string
+}
 
 export function NavUser() {
-  const [admin, setAdmin] = useState<Admin | null>(null);
+  const [profile, setProfile] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const { isMobile } = useSidebar();
+  const { user, role } = useAuth();  // ✅ new
 
   useEffect(() => {
-    const fetchAdminData = async () => {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const fetchProfile = async () => {
+      if (!user) return
 
-      if (user) {
-        const { data, error } = await supabase
-          .from('admins')
-          .select('*')
-          .eq('email', user.email)
-          .single();
+      let tableName = ""
+      if (role === "admin") tableName = "admins"
+      else if (role === "coordinator") tableName = "coordinators"
+      else if (role === "driver") tableName = "driver"
 
-        if (error) {
-          console.error('Error fetching admin data:', error.message);
-        } else {
-          setAdmin(data);
-        }
-      } else if (userError) {
-        console.error('Error getting user:', userError.message);
+      if (!tableName) return
+
+      const { data, error } = await supabase
+        .from(tableName)
+        .select("*")
+        .eq("email", user.email)
+        .single()
+
+      if (error) {
+        console.error(`Error fetching ${role} data:`, error.message)
+      } else {
+        setProfile(data)
       }
-      setLoading(false);
-    };
-
-    fetchAdminData();
-  }, []);
-
-    if (loading){
-      return(
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>     
-      )
+      setLoading(false)
     }
 
-  if (!admin) {
-    return <div>No admin data found.</div>;
+    fetchProfile()
+  }, [user, role])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
+
+  if (!profile) {
+    return <div>No {role} data found.</div>
   }
 
   const handleLogout = async () => {
@@ -91,17 +102,17 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground md:h-8 md:p-0"
             >
               <Avatar className="h-8 w-8 rounded-full">
-                {admin.avatar ? (
+                {profile.avatar ? (
                 <AvatarImage
-                 src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${admin.avatar}`}
-                 alt={admin.name} />
+                 src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${profile.avatar}`}
+                 alt={profile.name} />
                 ):(
-                  <AvatarFallback className="rounded-full">{admin.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                  <AvatarFallback className="rounded-full">{profile.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
                 )}
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{admin.name}</span>
-                <span className="truncate text-xs">{admin.email}</span>
+                <span className="truncate font-semibold">{profile.name}</span>
+                <span className="truncate text-xs">{profile.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -115,17 +126,17 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-full grayscale">
-                {admin.avatar ? (
+                {profile.avatar ? (
                 <AvatarImage
-                 src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${admin.avatar}`} 
-                 alt={admin.name} />
+                 src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${profile.avatar}`} 
+                 alt={profile.name} />
                 ):(
-                  <AvatarFallback className="rounded-full">{admin.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                  <AvatarFallback className="rounded-full">{profile.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
                 )}
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{admin.name}</span>
-                  <span className="truncate text-xs">{admin.email}</span>
+                  <span className="truncate font-semibold">{profile.name}</span>
+                  <span className="truncate text-xs">{profile.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -133,7 +144,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Administrator
+                {role}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

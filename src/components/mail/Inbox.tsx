@@ -17,7 +17,11 @@ export default function Inbox() {
     <div className="flex-1 p-6 space-y-4">
       <h2 className="text-xl font-semibold">{selectedMail.subject?.subject}</h2>
       <div className="text-sm text-muted-foreground">
-        From: {selectedMail.driver?.name} ({selectedMail.driver?.email})
+        From: {selectedMail.sender} ({selectedMail.sender_email}){" "}
+        <br />To: {selectedMail.receiver} ({selectedMail.receiver_email})
+      </div>
+      <div className="text-sm text-muted-foreground">
+        Date: {new Date(selectedMail.created_at).toLocaleString()}
       </div>
       <hr className="my-2" />
       <p className="whitespace-pre-line">{String(selectedMail.message)}</p>

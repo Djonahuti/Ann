@@ -2,16 +2,16 @@
 import * as React from "react"
 import {
   Bell,
-  Truck,
+  Octagon,
   Inbox,
   MoreHorizontal,
   PersonStanding,
   Scale,
   Cog,
-  Blocks,
-  ShoppingBag,
-  User2,
-  Database,
+  File,
+  Pencil,
+  Send,
+  Trash,
   LogOut,
 } from "lucide-react"
 
@@ -30,18 +30,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Admin } from "@/types"
 import { supabase } from "@/lib/supabase"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Badge } from "./ui/badge"
 import ThemeToggle from "./ThemeToggle"
+import { useAuth } from "@/contexts/AuthContext"
 
-
+type UserData = {
+  id: number
+  name: string
+  email: string
+  avatar?: string
+}
 
 export function PopRight() {
   const [isOpen, setIsOpen] = React.useState(false)
   const [unreadCount, setUnreadCount] = React.useState(0);
-  const [paidOrderCount, setPaidOrderCount] = React.useState(0);
+  const { user, role } = useAuth();
 
   const data = [
     [
@@ -52,44 +57,43 @@ export function PopRight() {
         count: unreadCount,
       },
       {
-        label: "Customer Login",
-        icon: User2,
-        url: "/login",
+        label: "Sent",
+        icon: Send,
+        url: "*",
       },
       {
-        label: "Seller Login",
-        icon: ShoppingBag,
-        url: "*",
+        label: "Compose",
+        icon: Pencil,
+        url: "/contact",
       },    
     ],
     [
       {
-        label: "Product Management",
-        icon: Blocks,
-        url: "/view-products",
+        label: "Draft",
+        icon: File,
+        url: "*",
       },
       {
-        label: "Order Management",
-        icon: Truck,
-        url: "/view-orders",
-        count: paidOrderCount,
+        label: "Spam",
+        icon: Octagon,
+        url: "*",
       },
       {
-        label: "DBMS",
-        icon: Database,
-        url: "/database",
+        label: "Trash",
+        icon: Trash,
+        url: "*",
       },    
     ],
     [
       {
         label: "Settings",
         icon: Cog,
-        url: "/account",
+        url: "*",
       },
       {
         label: "Accessibily",
         icon: PersonStanding,
-        url: "/account",
+        url: "*",
       },
       {
         label: "Penalties Information",
@@ -108,33 +112,36 @@ export function PopRight() {
     setIsOpen(true)
   }, []);
 
-  const [admin, setAdmin] = React.useState<Admin | null>(null);
+  const [profile, setProfile] = React.useState<UserData | null>(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchAdminData = async () => {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const fetchProfile = async () => {
+      if (!user) return
 
-      if (user) {
-        const { data, error } = await supabase
-          .from('admins')
-          .select('*')
-          .eq('email', user.email)
-          .single();
+      let tableName = ""
+      if (role === "admin") tableName = "admins"
+      else if (role === "coordinator") tableName = "coordinators"
+      else if (role === "driver") tableName = "driver"
 
-        if (error) {
-          console.error('Error fetching admin data:', error.message);
-        } else {
-          setAdmin(data);
-        }
-      } else if (userError) {
-        console.error('Error getting user:', userError.message);
+      if (!tableName) return
+
+      const { data, error } = await supabase
+        .from(tableName)
+        .select("*")
+        .eq("email", user.email)
+        .single()
+
+      if (error) {
+        console.error(`Error fetching ${role} data:`, error.message)
+      } else {
+        setProfile(data)
       }
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchAdminData();
-  }, []);
+    fetchProfile()
+  }, [user, role])
 
   React.useEffect(() => {
     const fetchCounts = async () => {
@@ -142,14 +149,7 @@ export function PopRight() {
         .from('contact')
         .select('id', { count: 'exact', head: true })
         .eq('is_read', false);
-  
-      const { count: paidOrderCount } = await supabase
-        .from('orders')
-        .select('*', { count: 'exact', head: true })
-        .eq('order_status', 'Paid');
-  
       setUnreadCount(unreadCount || 0);
-      setPaidOrderCount(paidOrderCount || 0);
     };
   
     fetchCounts();
@@ -163,9 +163,9 @@ export function PopRight() {
       )
     }
 
-  if (!admin) {
-    return <div>No admin data found.</div>;
-  }  
+  if (!profile) {
+    return <div>No {role} data found.</div>
+  } 
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -175,17 +175,17 @@ export function PopRight() {
   return (
     <div className="flex items-center gap-2 text-sm">
       <div className="hidden font-medium text-muted-foreground md:inline-block">
-        {admin.email}
+        {profile.email}
       </div>
       <Avatar className="h-8 w-8 rounded-full">
-        {admin.avatar ? (
+        {profile.avatar ? (
         <AvatarImage
-         src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${admin.avatar}`}
-         alt={admin.name}
+         src={`https://uffkwmtehzuoivkqtefg.supabase.co/storage/v1/object/public/receipts/${profile.avatar}`}
+         alt={profile.name}
          className="rounded-full" 
          />
         ):(
-          <AvatarFallback className="rounded-full">{admin.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+          <AvatarFallback className="rounded-full">{profile.name.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
         )}
       </Avatar>
       <Popover open={isOpen} onOpenChange={setIsOpen}>

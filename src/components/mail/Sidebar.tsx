@@ -25,6 +25,9 @@ import { supabase } from "@/lib/supabase"
 import { MailContext } from "@/contexts/MailContext"
 import { NavUser } from "./NavUser"
 import { useEffect as useThemeEffect } from 'react';
+import { useAuth } from "@/contexts/AuthContext"
+import { Badge } from "../ui/badge"
+import { Link } from "react-router-dom"
 
 // This is sample data
 const data = {
@@ -100,6 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { setSelectedMail, activeFilter, setActiveFilter } = React.useContext(MailContext)
     const [settings, setSettings] = React.useState<any>(null);
   const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
+  const { user, role } = useAuth()   // ✅ new
 
   React.useEffect(() => {
     const fetchSettings = async () => {
@@ -127,18 +131,90 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         .select('*, driver(name, email, avatar), subject(subject)')
         .order('created_at', { ascending: false }); // Optional: Order by submission date
 
+      if (activeFilter === "Starred") {
+        query = query.eq('is_starred', true);
+      } else if (activeFilter === "Important" && role !== "admin") {
+        query = query.eq('is_read', false);
+      }
+
+      // fetch normal contacts
+      const { data, error } = await query
+      let mapped: Contact[] = []
+      if (!error && data) {
+        mapped = (data as Contact[]).map((c) => ({
+          ...c,
+          source: "contact",
+        }))
+      }
+
+      let normalizedContacts: Contact[] = []
+
+        // --- ✅ Role-based filters ---
+        if (role === "driver") {
+          const { data: driver } = await supabase
+            .from("driver")
+            .select("id,name")
+            .eq("email", user?.email)
+            .single();
+
+          if (activeFilter === "Sent") {
+            query = query.eq("sender", driver?.name || "");
+          } else {
+            query = query.eq("driver", driver?.id || 0);
+          }
+        } else if (role === "coordinator") {
+          const { data: coord } = await supabase
+            .from("coordinators")
+            .select("id,name")
+            .eq("email", user?.email)
+            .single();
+
+          if (activeFilter === "Sent") {
+            query = query.eq("sender", coord?.name || "");
+          } else {
+            query = query.eq("coordinator", coord?.id || 0);
+          }
+        } else if (role === "admin" && activeFilter === "Important") {
+        // Admin: fetch external contact_us + normal contact
+        const { data: contactUs } = await supabase
+          .from("contact_us")
+          .select("*")
+          .order("created_at", { ascending: false })          
+        if (contactUs) {
+          normalizedContacts = contactUs.map((c: any) => ({
+            id: c.id,
+            coordinator_id: 0,
+            driver_id: 0,
+            subject_id: 0,
+            message: c.message,
+            created_at: c.created_at,
+            transaction_date: null,
+            is_starred: false,
+            is_read: false,
+            attachment: null,
+            sender: c.name || "Unknown",
+            receiver: "Admin",
+            sender_email: c.email || "",
+            receiver_email: "",
+            driver: null,
+            subject: { subject: c.subject || "Contact Us" },
+            coordinator: null,
+            source: "contact_us",
+          }))
+        }
+        }
+
         if (activeFilter === "Starred") {
           query = query.eq('is_starred', true);
-        } else if (activeFilter === "Important") {
+        } else if (activeFilter === "Important" && role !== "admin") {
           query = query.eq('is_read', false);
         }
 
-        const { data } = await query;
-      setContacts(data || []);
+      setContacts([...mapped, ...normalizedContacts])
     };
 
     fetchContact();
-  }, [activeFilter]);
+  }, [activeFilter, role, user]);
 
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("en-US", {
@@ -215,6 +291,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     };
   }, []);
 
+  const getHomeLink = () => {
+    if (role === "admin") return "/admin";
+    if (role === "coordinator") return "/coordinator";
+    if (role === "driver") return "/driver";
+    return "/";
+  }
+
   if (!settings) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -247,7 +330,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <a href="/admin">
+                <a href={getHomeLink()}>
                   <div className="flex aspect-square size-8 items-center justify-center text-sidebar-primary-foreground">
                   <img
                   src={logoUrl}
@@ -320,7 +403,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>
               {contacts.map((contact) => (
                 <div
-                  key={contact.id}
+                  key={`${contact.source}-${contact.id}`}
                   onClick={() => handleSelectMail(contact)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") setSelectedMail(contact);
@@ -338,17 +421,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       className="w-6 h-6 rounded-full object-cover"
                     />                     
                   ):(
-                    <AvatarFallback className="rounded-lg">{contact.driver?.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">
+                      {contact.sender.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
                   )}
                   </Avatar>
-                    <span>{contact.driver?.name}</span>{" "}
+                    <span>{contact.sender}</span>{" "}
+                    {/* ✅ External badge for contact_us */}
+                    {role === "admin" && String(contact.id).startsWith("us-") && (
+                      <Link to={`/contact-us/${String(contact.id).replace("us-", "")}`}>
+                        <Badge className="ml-2 bg-yellow-500 text-white">External</Badge>
+                      </Link>
+                    )}
                     <span className="ml-auto text-xs">{formatSubmittedAt(contact.created_at)}</span>
                   </div>
                   <div className="flex justify-between space-x-8 items-center relative gap-1">
                   <span className="font-medium right-2">{contact.subject?.subject}</span>
                   <a
                     href="#"
-                    key={contact.id}
+                    key={`${contact.source || "contact"}-${contact.id}`}
                     onClick={() => handleSelectMail(contact)}
                     className="text-lg left-2 text-yellow-500 hover:text-yellow-600 text-end"
                   >

@@ -29,6 +29,7 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [currentName, setCurrentName] = useState<string>("");
+  const [currentEmail, setCurrentEmail] = useState<string>("");
 
   // Load subjects
   useEffect(() => {
@@ -46,17 +47,19 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
       if (role === "driver") {
         const { data } = await supabase
           .from("driver")
-          .select("name")
+          .select("name, email")
           .eq("email", user.email)
           .single();
         if (data?.name) setCurrentName(data.name);
+        if (data?.email) setCurrentEmail(data.email);
       } else if (role === "coordinator") {
         const { data } = await supabase
           .from("coordinators")
-          .select("name")
+          .select("name, email")
           .eq("email", user.email)
           .single();
         if (data?.name) setCurrentName(data.name);
+        if (data?.email) setCurrentEmail(data.email);
       }
     };
     fetchName();
@@ -95,6 +98,7 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
       subject: selectedSubject,
       message,
       sender: currentName || user?.email, // fallback to email
+      sender_email: currentEmail || user?.email,
       attachment: attachmentUrl,
     };
 
@@ -174,6 +178,24 @@ export default function Contact({ coordinatorId, driverId, onSuccess }: ContactP
           readOnly
           className="w-full border rounded px-3 py-2"
         />
+      </div>
+
+      <div>
+        <Label className="block text-sm font-medium mb-1">Sender</Label>
+        <div className="flex gap-2">
+        <Input
+          type="text"
+          value={currentName}
+          readOnly
+          className="border rounded px-3 py-2"
+        />
+        <Input
+          type="text"
+          value={currentEmail}
+          readOnly
+          className="border rounded px-3 py-2"
+        />    
+        </div>    
       </div>
 
       <div>

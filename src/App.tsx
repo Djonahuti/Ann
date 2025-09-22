@@ -27,6 +27,7 @@ import SettingsEdit from './pages/admin/SettingsEdit'
 import { ThemeProvider } from './components/ThemeProvider'
 import MailLayout from './layouts/MailLayout'
 import MailView from './components/mail/MailView'
+import ContactUsDetail from './components/mail/ContactUsDetail'
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
 
             <Route element={<MailLayout />}>
               <Route path="/my-inbox" element={<ProtectedRoute><MailView /></ProtectedRoute>} />
+              <Route path="/contact-us/:id" element={<ProtectedRoute><ContactUsDetail /></ProtectedRoute>} />
             </Route>
 
           </Routes>
