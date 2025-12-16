@@ -39,7 +39,7 @@ jobs:
       - name: FTP deploy
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server-ip: ${{ secrets.FTP_SERVER }}          # required: FTP server host or IP
+          server: ${{ secrets.FTP_SERVER }}          # required: FTP server host or IP
           username: ${{ secrets.FTP_USERNAME }}      # required
           password: ${{ secrets.FTP_PASSWORD }}      # required
           port: ${{ secrets.FTP_PORT }}              # optional (default 21)
