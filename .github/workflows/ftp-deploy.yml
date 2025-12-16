@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}      # required
           port: ${{ secrets.FTP_PORT }}              # optional (default 21)
           protocol: ${{ secrets.FTP_PROTOCOL }}      # optional: set to 'sftp' for SFTP
-          local-dir: dist                             # Vite output folder
+          local-dir: ./dist/                             # Vite output folder
           server-dir: /  # optional: e.g., /public_html
           exclude: ".git* .github* node_modules"
 
