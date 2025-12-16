@@ -1,0 +1,55 @@
+name: FTP Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: FTP deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server-ip: ${{ secrets.FTP_SERVER }}          # required: FTP server host or IP
+          username: ${{ secrets.FTP_USERNAME }}      # required
+          password: ${{ secrets.FTP_PASSWORD }}      # required
+          port: ${{ secrets.FTP_PORT }}              # optional (default 21)
+          protocol: ${{ secrets.FTP_PROTOCOL }}      # optional: set to 'sftp' for SFTP
+          local-dir: dist                             # Vite output folder
+          server-dir: /  # optional: e.g., /public_html
+          exclude: ".git* .github* node_modules"
+
+# Notes:
+# - Add the repository secrets: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_PROTOCOL (optional: FTP_PORT, FTP_REMOTE_DIR)
+# - Add Vite build secrets: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
+# - Adjust the branch under 'on.push.branches' if you want a different deploy branch
+# - For manual test runs use the 'Run workflow' button on the Actions tab (workflow_dispatch)
